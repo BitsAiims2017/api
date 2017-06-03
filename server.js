@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const logger = require('morgan')('tiny');
 
 // config options
 const config = {
@@ -7,12 +8,14 @@ const config = {
     'port': 2000
 };
 
-// routes
-app.get('/', function (req, res) {
-    res.send('Hello, AIIMS');
-});
+app
+    // add a logger
+    .use(logger)
 
-// start the app
-app.listen(config.port, config.host, function () {
-    console.log('Listening on ' + config.host + ':' + config.port);
-});
+    // add default routes
+    .use('/', require('./routes/index.js'))
+
+    // start the app
+    .listen(config.port, config.host, function () {
+        console.log('Listening on ' + config.host + ':' + config.port);
+    });
