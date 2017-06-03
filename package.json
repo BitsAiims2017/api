@@ -1,0 +1,28 @@
+{
+  "name": "aiims-api",
+  "version": "0.0.1",
+  "description": "aiims app by bits",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BitsAiims2017/api.git"
+  },
+  "keywords": [
+    "aiims",
+    "bits",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BitsAiims2017/api/issues"
+  },
+  "homepage": "https://github.com/BitsAiims2017/api#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
