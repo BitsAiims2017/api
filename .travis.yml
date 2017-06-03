@@ -8,6 +8,5 @@ cache:
 
 install:
     - npm install
-    - npm install --only=dev
 git:
     depth: 2

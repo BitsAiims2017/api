@@ -12,11 +12,11 @@ const config = {
     'port': 2000
 };
 
-describe('on /', function () {
+describe('on /', () => {
 
     // test the get route
-    describe('GET', function () {
-        it('should get 200 status and return nothing', function () {
+    describe('GET', () => {
+        it('should get 200 status and return nothing', () => {
             chai.request('http://localhost:2000')
                 .get('/')
                 .end((err, res) => {

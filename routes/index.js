@@ -1,17 +1,17 @@
 const router = require('express').Router();
 
 router.route('/')
-    .get(function (req, res) {
+    .get((req, res) => {
         // handle get request
         res.send('Hello, AIIMS');
     })
-    .post(function (req, res) {
+    .post((req, res) => {
         // handle post request
     })
-    .put(function (req, res) {
+    .put((req, res) => {
         // handle put request
     })
-    .delete(function (req, res) {
+    .delete((req, res) => {
         // handle delete request
     });
 
