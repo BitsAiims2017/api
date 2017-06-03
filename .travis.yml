@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-    - "iojs"
+    - "6"
     - "7"
 cache:
     directories:
         - "node_modules"
 
-install: npm install
+install:
+    - npm install
+    - npm install --only=dev
 git:
     depth: 2
