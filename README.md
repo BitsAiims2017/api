@@ -1,3 +1,5 @@
+![build](https://api.travis-ci.org/BitsAiims2017/api.svg?branch=master "Build")
+
 # API
 The common API for all aiims apps
 
