@@ -7,17 +7,14 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 let server = require('../server');
-const config = {
-    'host': 'localhost',
-    'port': 2000
-};
+const config = require('../config.js');
 
 describe('on /', () => {
 
     // test the get route
     describe('GET', () => {
         it('should get 200 status and return nothing', () => {
-            chai.request('http://localhost:2000')
+            chai.request(config.host + ':' + config.port)
                 .get('/')
                 .end((err, res) => {
                     res.should.have.status(200);

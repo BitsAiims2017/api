@@ -1,15 +1,11 @@
 // start using strict ES6
-"using strict";
+'using strict';
 
 const express = require('express');
 const app = express();
 const logger = require('morgan')('tiny');
 
-// config options
-const config = {
-    'host': 'localhost',
-    'port': 2000
-};
+const config = require('./config.js');
 
 app
     // add a logger
