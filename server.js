@@ -17,6 +17,7 @@ app.locals.pretty = true;
 
 // add routes
 app.use('/', require('./routes/index.js'));
+app.use('/user', require('./routes/user.js'));
 
 // start the app
 app.listen(config.port, config.host, () => {
