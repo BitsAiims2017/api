@@ -5,17 +5,16 @@ const util = require('../util.js');
 
 router.route('/').
     get((req, res) => {
-        // handle get request
         res.sendStatus(200);
     }).
     post((req, res) => {
-        // handle post request
+        res.sendStatus(400);
     }).
     put((req, res) => {
-        // handle put request
+        res.sendStatus(400);
     }).
     delete((req, res) => {
-        // handle delete request
+        res.sendStatus(400);
     });
 
 module.exports = router;

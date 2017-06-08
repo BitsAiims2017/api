@@ -23,4 +23,4 @@ app.listen(config.port, config.host, () => {
         console.log('Listening on ' + config.host + ':' + config.port);
 });
 
-module.exports = app;
+module.exports = app; // for use in testing
