@@ -9,7 +9,7 @@ const app = require('../server.js');
 chai.use(chaiHttp);
 
 describe('/', () => {
-    it('should return 200 on GET', done => {
+    it('should return 200 on GET', (done) => {
         chai.
             request(app).
             get('/').

@@ -7,7 +7,7 @@ const logger = require('morgan');
 
 const config = require('./config.js'); // load config
 
-if (process.env.NODE_ENV != 'test') {
+if (process.env.NODE_ENV !== 'test') {
     app.use(logger('dev')); // add a logger
 }
 
