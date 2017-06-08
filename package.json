@@ -24,6 +24,7 @@
   "homepage": "https://github.com/BitsAiims2017/api#readme",
   "dependencies": {
     "express": "^4.15.3",
+    "mongoose": "^4.10.5",
     "morgan": "^1.8.2"
   },
   "devDependencies": {
