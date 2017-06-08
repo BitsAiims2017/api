@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/BitsAiims2017/api.svg?branch=master)](https://travis-ci.org/BitsAiims2017/api)
 [![Gitter chat](https://badges.gitter.im/BitsAiims2017/api.png)](https://gitter.im/BITS-Developers/Lobby)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ceb3c67ab4004c4ebeb8413a823dcc22)](https://www.codacy.com/app/UtkarshMe/api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=BitsAiims2017/api&amp;utm_campaign=Badge_Grade)
 
 
 # API
