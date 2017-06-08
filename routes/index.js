@@ -1,18 +1,18 @@
 const router = require('express').Router();
+const util = require('../util.js');
 
-router.route('/')
-    .get((req, res) => {
-        // handle get request
-        res.send('Hello, AIIMS');
-    })
-    .post((req, res) => {
-        // handle post request
-    })
-    .put((req, res) => {
-        // handle put request
-    })
-    .delete((req, res) => {
-        // handle delete request
+router.route('/').
+    get((req, res) => {
+        res.sendStatus(200);
+    }).
+    post((req, res) => {
+        res.sendStatus(400);
+    }).
+    put((req, res) => {
+        res.sendStatus(400);
+    }).
+    delete((req, res) => {
+        res.sendStatus(400);
     });
 
 module.exports = router;

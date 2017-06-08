@@ -10,3 +10,6 @@ install:
     - npm install
 git:
     depth: 2
+
+script:
+    - npm test

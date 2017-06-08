@@ -1,15 +1,19 @@
 [![Build Status](https://travis-ci.org/BitsAiims2017/api.svg?branch=master)](https://travis-ci.org/BitsAiims2017/api)
 [![Gitter chat](https://badges.gitter.im/BitsAiims2017/api.png)](https://gitter.im/BITS-Developers/Lobby)
 
+
 # API
 The common API for all aiims apps
 
+
 ### How to
+You should have NodeJS and MongoDB installed and running
 ```bash
 git clone https://github.com/BitsAiims2017/api
 cd api
 npm install && npm start
 ```
+
 
 ### Contributing
 - Please use **4 SPACES**, no TABS.
@@ -18,8 +22,18 @@ npm install && npm start
 doubt.
 - Please run ```npm test``` to check that all tests pass before opening a pull request.
 
+
+### Documentation
+```bash
+npm install
+npm run-script gendoc
+```
+Open ```index.html``` in ```docs/``` for API reference
+
+
 ### Authors
 The BITS AIIMS students
+
 
 ### License
 MIT
