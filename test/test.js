@@ -1,4 +1,5 @@
-const assert = require('assert');
+process.env.NODE_ENV = 'test';
+
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
@@ -9,19 +10,22 @@ chai.use(chaiHttp);
 let server = require('../server');
 const config = require('../config.js');
 
-describe('on /', () => {
+const app = require('../server.js');
+
+describe('/', () => {
 
     // test the get route
-    describe('GET', () => {
-        it('should get 200 status and return nothing', () => {
-            chai.request(config.host + ':' + config.port)
-                .get('/')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('array');
-                    res.body.length.should.be.eql(0);
-                    done();
-                });
-        });
+    it('should return 200 on GET', done => {
+        chai.
+            request(app).
+            get('/').
+            end((err, res) => {
+                should.not.exist(err);
+                res.should.have.status(200);
+                done();
+            });
     });
+    it('should return 404 on POST');
+    it('should return 404 on PUT');
+    it('should return 404 on DELETE');
 });

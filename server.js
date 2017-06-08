@@ -3,20 +3,24 @@
 
 const express = require('express');
 const app = express();
-const logger = require('morgan')('tiny');
+const logger = require('morgan');
 
-// load config
-const config = require('./config.js');
+const config = require('./config.js'); // load config
 
-// add app middlewares and start app
-app.
-    // add a logger
-    use(logger).
+if (process.env.NODE_ENV != 'test') {
+    app.use(logger('dev')); // add a logger
+}
 
-    // add default routes
-    use('/', require('./routes/index.js')).
+// set json properties
+app.set('json spaces', 2);
+app.locals.pretty = true;
 
-    // start the app
-    listen(config.port, config.host, () => {
+// add routes
+app.use('/', require('./routes/index.js'));
+
+// start the app
+app.listen(config.port, config.host, () => {
         console.log('Listening on ' + config.host + ':' + config.port);
-    });
+});
+
+module.exports = app;

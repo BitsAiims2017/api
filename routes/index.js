@@ -6,7 +6,7 @@ const util = require('../util.js');
 router.route('/').
     get((req, res) => {
         // handle get request
-        res.send('Hello, AIIMS');
+        res.sendStatus(200);
     }).
     post((req, res) => {
         // handle post request
