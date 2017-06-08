@@ -25,7 +25,6 @@ describe('/user/:id', () => {
     it('should return 202 on PUT by user of ID = id');
     it('should return 202 on PUT by admin');
     it('should return 403 on PUT by any other user');
-    it('should return 202 on DELETE by user of ID = id');
     it('should return 202 on DELETE by admin');
     it('should return 403 on DELETE by any other user');
 });

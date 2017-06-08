@@ -13,4 +13,3 @@ git:
 
 script:
     - npm test
-    - npm run-script gendoc
