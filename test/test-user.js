@@ -12,7 +12,23 @@ describe('/user', () => {
     it('should return 401 on GET by non admin');
     it('should return 200 and all users on GET by admin');
     it('should return 401 on POST by non admin');
-    it('should return 201 on POST by admin');
+    it('should return 201 on POST by admin', (done) => {
+        chai.
+            request(app).
+            post('/user').
+            send({
+                name: 'User1',
+                username: 'username01',
+                password: 'password1',
+                role: 'admin'
+            }).
+            then((res) => {
+                should.exist(res);
+                res.should.have.status(201);
+                res.body.message.should.be.equal('User created');
+                done();
+            });
+    });
     it('should return 400 on PUT');
     it('should return 400 on DELETE');
 });

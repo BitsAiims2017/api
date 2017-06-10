@@ -12,6 +12,7 @@ db.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' +
 // test the connection
 db.connection.
     on('error', () => {
+        console.log('Could not connect to database');
         console.error.bind(console, 'connection error:');
     }).
     once('open', () => {
@@ -20,4 +21,5 @@ db.connection.
         }
     });
 
+db.Promise = global.Promise;
 module.exports = db;

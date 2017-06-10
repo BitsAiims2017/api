@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 // import util funtions
-const util = require('../util.js');
+const lib = require('../lib/user.js');
 
 /**
  * @apiName AIIMS IMS
@@ -46,12 +46,32 @@ router.route('/').
      * @apiPermission admin
      *
      * @apiError 401 The request is not authorized
+     * @apiError 409 User already exists
+     * @apiError 500 Internal error
      */
-    post((req, res) => { }).
+    post((req, res) => {
+        let data = {};
+
+        //TODO: clean and validate user data
+        data.name = req.body.name;
+        data.username = req.body.username;
+        data.password = req.body.password;
+        data.role = req.body.role;
+
+        //TODO: validate user (admin)
+
+        lib.new_user(data, (err) => {
+            res.status(err.status).send(err);
+        });
+    }).
 
     /* not supported */
-    put((req, res) => { }).
-    delete((req, res) => { });
+    put((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    }).
+    delete((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    });
 
 router.route('/:id').
     /**
@@ -68,7 +88,8 @@ router.route('/:id').
      *
      * @apiSuccessExample {json} Success:
      *  {
-     *      "name": "User Name",
+     *      "name": "Name",
+     *      "username": "Username",
      *      "role": "User Role"
      *  }
      *
@@ -83,10 +104,16 @@ router.route('/:id').
      *      "error": "Error Message"
      *  }
      */
-    get((req, res) => { }).
+    get((req, res) => {
+        lib.get_user(req.params.id, (err, data) => {
+            res.send((err) ? err : data);
+        });
+    }).
 
     /* not supported */
-    post((req, res) => { }).
+    post((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    }).
 
     /**
      * @apiGroup User
