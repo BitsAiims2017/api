@@ -39,7 +39,7 @@ router.route('/').
         //TODO: Check authentication
         lib.get_all_users((err, data) => {
             if (err) {
-                res.status(err.status).send(data);
+                res.status(err.status).send(err);
             } else {
                 res.send(data);
             }
@@ -115,7 +115,11 @@ router.route('/:username').
      */
     get((req, res) => {
         lib.get_user(req.params.username, (err, data) => {
-            res.send((err) ? err : data);
+            if (err) {
+                res.status(err.status).send(err);
+            } else {
+                res.send(data);
+            }
         });
     }).
 

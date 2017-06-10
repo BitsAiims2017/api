@@ -39,14 +39,11 @@ user_schema.methods.hash_password = (password) => {
         toString('hex').
         slice(0, length/2);
 
-    const hash = crypto.createHmac('sha512', salt);
-    hash.update(password);
-    var value = hash.digest('hex');
+    const hashed = crypto.createHmac('sha512', salt);
+    hashed.update(password);
+    var hash = hashed.digest('hex');
 
-    return {
-        salt: salt,
-        hash: value
-    };
+    return {salt, hash};
 };
 
 module.exports = db.model('User', user_schema);

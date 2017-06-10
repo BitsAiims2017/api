@@ -9,6 +9,46 @@ const User = require('../models/user.js');
 
 chai.use(chaiHttp);
 
+/* *** Utility functions *** */
+function add_users(done) {
+    // remove all users
+    User.remove({}, (err) => { should.not.exist(err); });
+
+    // add an admin and a viewer
+    User.collection.insertMany([ 
+        { 
+            username: 'admin',
+            password: { hash: 'hash', salt: 'salt' },
+            name: 'Administrator',
+            role: 'admin'
+        },
+        {
+            username: 'username01',
+            password: { hash: 'hash', salt: 'salt' },
+            name: 'User 01',
+            role: 'viewer'
+        }
+    ],{}, done);
+}
+
+function remove_all_users(done) {
+    User.remove({}, (err) => {
+        should.not.exist(err); 
+        done();
+    });
+}
+
+function check_bad_request(err, res) {
+
+    should.exist(err);
+    should.exist(res);
+    err.should.have.status(400);
+    res.should.have.status(400);
+    should.exist(res.body);
+    res.body.message.should.equal('Invalid request');
+}
+
+/* *** Tests *** */
 describe('/user', () => {
 
     beforeEach(add_users);
@@ -42,7 +82,7 @@ describe('/user', () => {
                 should.exist(res);
                 res.should.have.status(201);
                 res.body.message.should.be.equal('User created');
-                User.find({}, (e, p) => { p.length.should.equal(3) });
+                User.find({}, (e, p) => { p.length.should.equal(3); });
                 done();
             });
     });
@@ -133,43 +173,3 @@ describe('/user/:id', () => {
     });
     it('should return 403 on DELETE by any other user');
 });
-
-
-/* *** Utility functions *** */
-function add_users(done) {
-    // remove all users
-    User.remove({}, (err) => { should.not.exist(err); });
-
-    // add an admin and a viewer
-    User.collection.insertMany([ 
-        { 
-            username: 'admin',
-            password: { hash: 'hash', salt: 'salt' },
-            name: 'Administrator',
-            role: 'admin'
-        },
-        {
-            username: 'username01',
-            password: { hash: 'hash', salt: 'salt' },
-            name: 'User 01',
-            role: 'viewer'
-        }
-    ],{}, done);
-};
-
-function remove_all_users(done) {
-    User.remove({}, (err) => {
-        should.not.exist(err); 
-        done();
-    });
-}
-
-function check_bad_request(err, res) {
-
-    should.exist(err);
-    should.exist(res);
-    err.should.have.status(400);
-    res.should.have.status(400);
-    should.exist(res.body);
-    res.body.message.should.equal('Invalid request');
-}
