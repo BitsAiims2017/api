@@ -1,14 +1,7 @@
 const crypto = require('crypto');
 const db = require('../config_db.js');
 
-let count = 0;
-
 const user_schema = new db.Schema({
-    user_id: {
-        type: Number,
-        required:true,
-        unique: true
-    },
     name: String,
     username: {
         type: String,
@@ -54,10 +47,6 @@ user_schema.methods.hash_password = (password) => {
         salt: salt,
         hash: value
     };
-};
-
-user_schema.methods.get_new_user_id = () => {
-    return count++;
 };
 
 module.exports = db.model('User', user_schema);

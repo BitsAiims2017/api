@@ -35,7 +35,16 @@ router.route('/').
      *      "error": "Error Message"
      *  }
      */
-    get((req, res) => { }).
+    get((req, res) => {
+        //TODO: Check authentication
+        lib.get_all_users((err, data) => {
+            if (err) {
+                res.status(err.status).send(data);
+            } else {
+                res.send(data);
+            }
+        });
+    }).
 
     /**
      * @apiGroup User
@@ -73,7 +82,7 @@ router.route('/').
         res.status(400).send(lib.invalid_request());
     });
 
-router.route('/:id').
+router.route('/:username').
     /**
      * @apiGroup User
      * @apiVersion 0.0.1
@@ -81,7 +90,7 @@ router.route('/:id').
      * @api {get} /user/:id 2.1 Request user information
      * @apiDescription This can be used to get user details
      *
-     * @apiParam {Number} id User ID
+     * @apiParam {Number} username The username of the user
      *
      * @apiSuccess {String} name Name of the user
      * @apiSuccess {String} role Role of the user
@@ -105,7 +114,7 @@ router.route('/:id').
      *  }
      */
     get((req, res) => {
-        lib.get_user(req.params.id, (err, data) => {
+        lib.get_user(req.params.username, (err, data) => {
             res.send((err) ? err : data);
         });
     }).
@@ -121,7 +130,7 @@ router.route('/:id').
      *
      * @api {put} /user/:id 2.2 Change user information
      *
-     * @apiParam {Number} id User ID
+     * @apiParam {Number} username The username to be changed
      * @apiParam {String} name (optional) New name
      *
      * @apiSuccessExample {json} Success:
@@ -148,16 +157,21 @@ router.route('/:id').
      * @api {delete} /user/:id 2.3 Delete user
      * @apiPermission admin
      *
-     * @apiParam {Number} id User ID
+     * @apiParam {Number} username The username to be deleted
      *
      * @apiError 403 The request is not authorized
      *
      * @apiErrorExample {json} Error:
      *  {
      *      "status": "Error status code",
-     *      "error": "Error Message"
+     *      "message": "Error Message"
      *  }
      */
-    delete((req, res) => { });
+    delete((req, res) => {
+        //TODO: Check authentication
+        lib.delete_user(req.params.username, (data) => {
+            res.status(data.status).send(data);
+        });
+    });
 
 module.exports = router;

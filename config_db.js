@@ -2,7 +2,7 @@ const db = require('mongoose');
 const config = require('./config.js');
 
 if (process.env.NODE_ENV === 'test') {
-    config.db.name = 'test';
+    config.db.name = 'test_db';
 }
 
 // connect the database
