@@ -3,11 +3,15 @@ const config = require('./config.js');
 
 if (process.env.NODE_ENV === 'test') {
     config.db.name = 'test_db';
+    config.db.username = 'test_user';
+    config.db.password = 'test_password';
 }
 
 // connect the database
 db.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' +
     config.db.name);
+//db.connect('mongodb://' + config.username + ':' + config.password + '@' +
+    //config.db.host + ':' + config.db.port + '/' + config.db.name);
 
 // test the connection
 db.connection.

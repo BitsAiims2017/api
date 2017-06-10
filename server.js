@@ -4,6 +4,8 @@
 const express = require('express');
 const app = express();
 const logger = require('morgan');
+const cookie_parser = require('cookie-parser');
+const body_parser = require('body-parser');
 
 const config = require('./config.js'); // load config
 
@@ -14,6 +16,11 @@ if (process.env.NODE_ENV !== 'test') {
 // set json properties
 app.set('json spaces', 2);
 app.locals.pretty = true;
+
+// add cookie and body parsers
+app.use(cookie_parser(config.cookie_secret));
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended: true}));
 
 // add routes
 app.use('/', require('./routes/index.js'));

@@ -78,7 +78,8 @@ describe('/user', () => {
                 password: 'password1',
                 role: 'viewer'
             }).
-            then((res) => {
+            end((err, res) => {
+                should.not.exist(err);
                 should.exist(res);
                 res.should.have.status(201);
                 res.body.message.should.be.equal('User created');
