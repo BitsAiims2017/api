@@ -4,8 +4,9 @@
   "description": "The API backend for the AIIMS Inventory Management System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV=dev node server.js",
     "test": "mocha",
+    "nodemon": "NODE_ENV=dev nodemon server.js",
     "gendoc": "apidoc -i routes/ -o docs/"
   },
   "repository": {
@@ -24,6 +25,9 @@
   },
   "homepage": "https://github.com/BitsAiims2017/api#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "crypto": "0.0.3",
     "express": "^4.15.3",
     "mongoose": "^4.10.5",
     "morgan": "^1.8.2"
@@ -35,7 +39,7 @@
     "mocha": "^3.4.2"
   },
   "apidoc": {
-      "name": "AIIMS IMS API",
-      "title": "AIIMS Inventory Management System"
+    "name": "AIIMS IMS API",
+    "title": "AIIMS Inventory Management System"
   }
 }
