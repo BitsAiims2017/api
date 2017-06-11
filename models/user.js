@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const db = require('../config_db.js');
+const db = require('../config/db.js');
 
 const user_schema = new db.Schema({
     name: String,

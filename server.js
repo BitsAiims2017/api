@@ -7,7 +7,7 @@ const logger = require('morgan');
 const cookie_parser = require('cookie-parser');
 const body_parser = require('body-parser');
 
-const config = require('./config.js'); // load config
+const config = require('./config/default.js'); // load config
 
 if (process.env.NODE_ENV !== 'test') {
     app.use(logger('dev')); // add a logger
@@ -27,7 +27,8 @@ app.use('/', require('./routes/index.js'));
 app.use('/user', require('./routes/user.js'));
 
 // start the app
-app.listen(config.port, config.host, () => {
+app.listen(process.env.PORT || config.port, process.env.HOST || config.host,
+    () => {
         console.log('Listening on ' + config.host + ':' + config.port);
 });
 
