@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
-const config = require('../config.js');
+const config = require('../config/default.js');
 const app = require('../server.js');
 
 chai.use(chaiHttp);

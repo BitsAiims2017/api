@@ -1,5 +1,5 @@
 const db = require('mongoose');
-const config = require('./config.js');
+const config = require('../config/default.js');
 
 if (process.env.NODE_ENV === 'test') {
     config.db.name = 'test_db';
@@ -8,10 +8,8 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // connect the database
-db.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' +
-    config.db.name);
-//db.connect('mongodb://' + config.username + ':' + config.password + '@' +
-    //config.db.host + ':' + config.db.port + '/' + config.db.name);
+db.connect(process.env.MONGODB_DB_URL || 'mongodb://' + config.db.host
+    + ':' + config.db.port + '/' + config.db.name);
 
 // test the connection
 db.connection.
