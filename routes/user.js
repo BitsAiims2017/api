@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 // import util funtions
 const lib = require('../lib/user.js');
+const auth = require('../lib/auth.js');
 
 /**
  * @apiName AIIMS IMS
@@ -35,8 +36,7 @@ router.route('/').
      *      "error": "Error Message"
      *  }
      */
-    get((req, res) => {
-        //TODO: Check authentication
+    get(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.get_all_users((err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -58,7 +58,7 @@ router.route('/').
      * @apiError 409 User already exists
      * @apiError 500 Internal error
      */
-    post((req, res) => {
+    post(auth.authenticate({role: 'admin'}), (req, res) => {
         let data = {};
 
         //TODO: clean and validate user data
@@ -66,8 +66,6 @@ router.route('/').
         data.username = req.body.username;
         data.password = req.body.password;
         data.role = req.body.role;
-
-        //TODO: validate user (admin)
 
         lib.new_user(data, (err) => {
             res.status(err.status).send(err);
@@ -113,7 +111,7 @@ router.route('/:username').
      *      "error": "Error Message"
      *  }
      */
-    get((req, res) => {
+    get(auth.authenticate({role: 'me'}), (req, res) => {
         lib.get_user(req.params.username, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -152,7 +150,10 @@ router.route('/:username').
      *      "error": "Error Message"
      *  }
      */
-    put((req, res) => { }).
+    put(auth.authenticate({role: 'me'}), (req, res) => {
+        //TODO: clean and validate user data
+        res.send('Not implemented');
+    }).
 
     /**
      * @apiGroup User
@@ -171,8 +172,7 @@ router.route('/:username').
      *      "message": "Error Message"
      *  }
      */
-    delete((req, res) => {
-        //TODO: Check authentication
+    delete(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.delete_user(req.params.username, (data) => {
             res.status(data.status).send(data);
         });

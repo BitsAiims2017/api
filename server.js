@@ -25,6 +25,7 @@ app.use(body_parser.urlencoded({extended: true}));
 // add routes
 app.use('/', require('./routes/index.js'));
 app.use('/user', require('./routes/user.js'));
+app.use('/auth', require('./routes/auth.js'));
 
 // start the app
 app.listen(process.env.PORT || config.port, process.env.HOST || config.host,

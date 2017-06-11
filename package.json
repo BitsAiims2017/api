@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.10.5",
     "morgan": "^1.8.2"
   },

@@ -1,58 +1,18 @@
 process.env.NODE_ENV = 'test';
 
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
 const config = require('../config/default.js');
 const app = require('../server.js');
 const User = require('../models/user.js');
-
+const util = require('../lib/test_util.js');
 chai.use(chaiHttp);
 
-/* *** Utility functions *** */
-function add_users(done) {
-    // remove all users
-    User.remove({}, (err) => { should.not.exist(err); });
-
-    // add an admin and a viewer
-    User.collection.insertMany([ 
-        { 
-            username: 'admin',
-            password: { hash: 'hash', salt: 'salt' },
-            name: 'Administrator',
-            role: 'admin'
-        },
-        {
-            username: 'username01',
-            password: { hash: 'hash', salt: 'salt' },
-            name: 'User 01',
-            role: 'viewer'
-        }
-    ],{}, done);
-}
-
-function remove_all_users(done) {
-    User.remove({}, (err) => {
-        should.not.exist(err); 
-        done();
-    });
-}
-
-function check_bad_request(err, res) {
-
-    should.exist(err);
-    should.exist(res);
-    err.should.have.status(400);
-    res.should.have.status(400);
-    should.exist(res.body);
-    res.body.message.should.equal('Invalid request');
-}
-
-/* *** Tests *** */
 describe('/user', () => {
 
-    beforeEach(add_users);
-    after(remove_all_users);
+    beforeEach(util.add_users);
+    after(util.remove_all_users);
 
     it('should return 401 on GET by non admin');
     it('should return 200 and all users on GET by admin', (done) => {
@@ -109,20 +69,20 @@ describe('/user', () => {
         chai.
             request(app).
             put('/user').
-            end(check_bad_request);
+            end(util.check_bad_request);
     });
     it('should return 400 on DELETE', () => {
         chai.
             request(app).
             delete('/user').
-            end(check_bad_request);
+            end(util.check_bad_request);
     });
 });
 
 describe('/user/:id', () => {
 
-    beforeEach(add_users);
-    after(remove_all_users);
+    beforeEach(util.add_users);
+    after(util.remove_all_users);
 
     it('should return 200 and user details on GET by admin', (done) => {
         chai.
@@ -156,7 +116,7 @@ describe('/user/:id', () => {
         chai.
             request(app).
             post('/user/username').
-            end(check_bad_request);
+            end(util.check_bad_request);
     });
     it('should return 202 on PUT by user of ID = id');
     it('should return 202 on PUT by admin');
