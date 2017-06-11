@@ -10,6 +10,9 @@ const auth = require('../lib/auth.js');
  * @apiVersion 0.0.1
  */
 
+// decode token and put data in req as 'req.data'
+router.use(auth.decode_token);
+
 router.route('/').
     /**
      * @apiGroup User

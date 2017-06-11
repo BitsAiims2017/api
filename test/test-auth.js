@@ -1,8 +1,8 @@
 process.env.NODE_ENV = 'test';
 
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let should = chai.should();
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
 const config = require('../config/default.js');
 const app = require('../server.js');
 const User = require('../models/user.js');
@@ -26,9 +26,7 @@ describe('/auth', () => {
                 should.exist(res);
                 res.should.have.status(200);
                 res.body.should.be.an('Object');
-                res.body.name.should.equal('Administrator');
-                res.body.username.should.equal('admin');
-                res.body.role.should.equal('admin');
+                should.exist(res.body.token);
                 should.not.exist(res.body.password);
                 done();
             });
@@ -64,6 +62,7 @@ describe('/auth', () => {
                 res.should.have.status(401);
                 res.body.should.be.an('Object');
                 res.body.message.should.equal('Wrong credentials');
+                should.not.exist(res.body.token);
                 done();
             });
     });

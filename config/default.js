@@ -5,6 +5,9 @@ const config = {
         host: 'localhost',
         port: '27017',
         name: 'dbname'
+    },
+    token: {
+        secret: 'hidden_yapper'
     }
 };
 
