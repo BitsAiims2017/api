@@ -35,7 +35,7 @@ describe('/user', () => {
             send({
                 name: 'User2',
                 username: 'username02',
-                password: 'password1',
+                password: 'password2',
                 role: 'viewer'
             }).
             end((err, res) => {

@@ -70,7 +70,8 @@ user_schema.methods.get_hash = function get_hash (password, salt) {
  */
 user_schema.methods.verify_password = function verify_password (password) {
     const hash = user_schema.methods.get_hash(password, this.password.salt);
-    if (hash === this.password.hash) {
+    if (crypto.timingSafeEqual(new Buffer(hash),
+        new Buffer(this.password.hash))) {
         return true;
     } else {
         return false;

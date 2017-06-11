@@ -6,24 +6,12 @@ let should = chai.should();
 const config = require('../config/default.js');
 const app = require('../server.js');
 const User = require('../models/user.js');
-
+const util = require('../lib/test_util.js');
 chai.use(chaiHttp);
 
 describe('/auth', () => {
-    before((done) => {
-        chai.
-            request(app).
-            post('/user').
-            send({
-                username: 'admin',
-                name: 'Administrator',
-                password: 'password01',
-                role: 'admin'
-            }).
-            end((req, res) => {
-                done();
-            });
-    });
+    beforeEach(util.add_users);
+    after(util.remove_all_users);
 
     it('should return 200 and a token on POST', (done) => {
         chai.
@@ -31,7 +19,7 @@ describe('/auth', () => {
             post('/auth').
             send({
                 username: 'admin',
-                password: 'password01'
+                password: 'password1'
             }).
             end((err, res) => {
                 should.not.exist(err);
