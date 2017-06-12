@@ -9,7 +9,7 @@ const User = require('../models/user.js');
 const util = require('../lib/test_util.js');
 chai.use(chaiHttp);
 
-describe('/user', () => {
+describe('/users', () => {
 
     beforeEach(util.add_users);
     after(util.remove_all_users);
@@ -18,7 +18,7 @@ describe('/user', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                get('/user').
+                get('/users').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);
@@ -32,7 +32,7 @@ describe('/user', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/user').
+                get('/users').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
@@ -47,7 +47,7 @@ describe('/user', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                post('/user').
+                post('/users').
                 send({
                     username: 'a_user',
                     name: 'Any other name',
@@ -68,7 +68,7 @@ describe('/user', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                post('/user').
+                post('/users').
                 send({
                     name: 'User2',
                     username: 'username02',
@@ -90,7 +90,7 @@ describe('/user', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                post('/user').
+                post('/users').
                 send({
                     username: 'admin',
                     name: 'Any other name',
@@ -110,13 +110,13 @@ describe('/user', () => {
     it('should return 400 on PUT', () => {
         chai.
             request(app).
-            put('/user').
+            put('/users').
             end(util.check_bad_request);
     });
     it('should return 400 on DELETE', () => {
         chai.
             request(app).
-            delete('/user').
+            delete('/users').
             end(util.check_bad_request);
     });
 });
@@ -130,7 +130,7 @@ describe('/user/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/user/username01').
+                get('/users/username01').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
@@ -148,7 +148,7 @@ describe('/user/:id', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                get('/user/username01').
+                get('/users/username01').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
@@ -166,7 +166,7 @@ describe('/user/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/user/nonexist').
+                get('/users/nonexist').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);
@@ -180,7 +180,7 @@ describe('/user/:id', () => {
     it('should return 400 on POST', () => {
         chai.
             request(app).
-            post('/user/username').
+            post('/users/username').
             end(util.check_bad_request);
     });
     it('should return 202 on PUT by user of ID = id');
@@ -190,7 +190,7 @@ describe('/user/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                delete('/user/username02').
+                delete('/users/username02').
                 send({token}).
                 end((err, res) => {
                     should.exist(res);
@@ -204,7 +204,7 @@ describe('/user/:id', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                delete('/user/username02').
+                delete('/users/username02').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);
