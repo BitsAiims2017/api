@@ -6,8 +6,10 @@ const app = express();
 const logger = require('morgan');
 const cookie_parser = require('cookie-parser');
 const body_parser = require('body-parser');
+const config = require('./config/default.js');
+const port = process.env.PORT || config.port;
+const host = process.env.HOST || config.host;
 
-const config = require('./config/default.js'); // load config
 
 if (process.env.NODE_ENV !== 'test') {
     app.use(logger('dev')); // add a logger
@@ -28,9 +30,8 @@ app.use('/users', require('./routes/user.js'));
 app.use('/auth', require('./routes/auth.js'));
 
 // start the app
-app.listen(process.env.PORT || config.port, process.env.HOST || config.host,
-    () => {
-        console.log('Listening on ' + config.host + ':' + config.port);
+app.listen(port, host, () => {
+    console.log('Listening on ' + host + ':' + port);
 });
 
 module.exports = app; // for use in testing
