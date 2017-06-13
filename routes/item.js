@@ -36,7 +36,15 @@ router.route('/:id').
         });
     }).
     post().
-    put().
+    put(auth.authenticate({role: 'admin'}), (req, res) => {
+        lib.update_item(req.params.id, req.body, (err, upd_res) => {
+            if (err) {
+                res.status(err.status).send(err);
+            } else {
+                res.send(upd_res);
+            }
+        });
+    }).
     delete(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.remove_item(req.params.id, (del_res) => {
             res.send(del_res);

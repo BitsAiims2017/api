@@ -203,8 +203,77 @@ describe('/items/:id', () => {
     it('should do nothing on POST by admin');
     it('should do nothing on POST by viewer');
 
-    it('should change details on PUT by admin');
-    it('should not change details on PUT by viewer');
+    it('should change some details on PUT by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                put('/items/3').
+                send({
+                    name: 'Item 3.1',
+                    price: 56,
+                    token
+                }).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.equal('Item updated');
+                    Item.findOne({id:'3', name: 'Item 3.1', price: 56},
+                        (err, item) => {
+                            should.not.exist(err);
+                            should.exist(item);
+                            done();
+                        });
+                });
+        });
+    });
+    it('should change all details on PUT by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                put('/items/3').
+                send({
+                    id: '3.1',
+                    name: 'Item 3.1',
+                    price: 56,
+                    quantity: 70,
+                    class: 'D',
+                    token
+                }).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.equal('Item updated');
+                    Item.findOne({
+                        id:'3.1',
+                        name: 'Item 3.1',
+                        price: 56,
+                        quantity: 70,
+                        class: 'D'
+                    }, (err, item) => {
+                        should.not.exist(err);
+                        should.exist(item);
+                        done();
+                    });
+                });
+        });
+    });
+    it('should not change details on PUT by viewer', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                put('/items/3').
+                send({token}).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(401);
+                    res.body.message.should.equal('Not authorized');
+                    done();
+                });
+        });
+    });
 
     it('should delete the item on DELETE by admin', (done) => {
         util.get_login_token('admin', (token) => {
