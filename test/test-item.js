@@ -142,9 +142,9 @@ describe('/items', () => {
 describe('/items/:id', () => {
 
     before(util.add_users);
-    before(util.add_items);
+    beforeEach(util.add_items);
     after(util.remove_all_users);
-    after(util.remove_all_items);
+    afterEach(util.remove_all_items);
 
     it('should return the specific item on GET by admin', (done) => {
         util.get_login_token('admin', (token) => {
@@ -233,7 +233,7 @@ describe('/items/:id', () => {
                 request(app).
                 put('/items/3').
                 send({
-                    id: '3.1',
+                    id:'3.1',
                     name: 'Item 3.1',
                     price: 56,
                     quantity: 70,
@@ -264,13 +264,40 @@ describe('/items/:id', () => {
             chai.
                 request(app).
                 put('/items/3').
-                send({token}).
+                send({name: 'New name', token}).
                 end((err, res) => {
                     should.exist(err);
                     should.exist(res);
                     res.should.have.status(401);
                     res.body.message.should.equal('Not authorized');
                     done();
+                });
+        });
+    });
+    it('should not give in to injection attacks', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                put('/items/3').
+                send({
+                    class: 'D',
+                    'while(1)': 'this',
+                    ']console.log(this)': 'this',
+                    '0];console.log(this)': 'this',
+                    token
+                }).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.equal('Item updated');
+                    Item.findOne({
+                        class: 'D'
+                    }, (err, item) => {
+                        should.not.exist(err);
+                        should.exist(item);
+                        done();
+                    });
                 });
         });
     });
