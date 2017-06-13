@@ -1,7 +1,11 @@
 const db = require('../config/db.js');
 
 const item_schema = new db.Schema({
-    id: String,
+    id: {
+        type: String,
+        required: true,
+        unique: true
+    },
     name: String,
     quantity: Number,
     class: String,

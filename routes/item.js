@@ -14,7 +14,17 @@ router.route('/').
     delete();
 
 router.route('/:id').
-    get().
+    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+        lib.get_item(req.params.id, (err, item) => {
+            if (err) {
+                res.status(err.status).send(err);
+            } else {
+                res.send(item);
+            }
+        });
+    }).
     post().
     put().
     delete();
+
+module.exports = router;
