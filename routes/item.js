@@ -9,7 +9,11 @@ router.use(auth.decode_token);
 
 router.route('/').
     get().
-    post().
+    post(auth.authenticate({role: 'admin'}), (req, res) => {
+        lib.add_item(req.body, (add_res) => {
+            res.status(add_res.status).send(add_res);
+        });
+    }).
     put().
     delete();
 

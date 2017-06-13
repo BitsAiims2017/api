@@ -11,14 +11,80 @@ chai.use(chaiHttp);
 describe('/items', () => {
 
     before(util.add_users);
+    before(util.add_items);
     after(util.remove_all_users);
+    after(util.remove_all_items);
 
     it('should return all items on GET by viewer');
     it('should return all items on GET by admin');
     it('should return nothing on empty database');
 
-    it('should add an item on POST by admin');
-    it('should not add an item on POST by viewer');
+    it('should add an item on POST by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                post('/items').
+                send({
+                    id: 7,
+                    name: 'Item 7',
+                    quantity: 40,
+                    price: 30.5,
+                    class: 'C',
+                    token
+                }).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(201);
+                    res.body.message.should.equal('Item added');
+                    done();
+                });
+        });
+    });
+    it('should not add an item on POST by viewer', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                post('/items').
+                send({
+                    id: 7,
+                    name: 'Item 7',
+                    quantity: 40,
+                    price: 30.5,
+                    class: 'C',
+                    token
+                }).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(401);
+                    res.body.message.should.equal('Not authorized');
+                    done();
+                });
+        });
+    });
+    it('should not add an item with duplicate id', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                post('/items').
+                send({
+                    id: '2',
+                    name: 'Item 2',
+                    quantity: 40,
+                    price: 30.5,
+                    class: 'C',
+                    token
+                }).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(409);
+                    res.body.message.should.equal('Item already exists');
+                    done();
+                });
+        });
+    });
 
     it('should do nothing on PUT by admin');
     it('should do nothing on PUT by viewer');
