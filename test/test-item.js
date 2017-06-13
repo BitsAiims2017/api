@@ -15,11 +15,57 @@ describe('/items', () => {
     after(util.remove_all_users);
     after(util.remove_all_items);
 
-    it('should return all items on GET by viewer');
-    it('should return all items on GET by admin');
-    it('should return nothing on empty database');
+    it('should return all items on GET by viewer', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                get('/items').
+                send({token}).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.should.be.an('Array');
+                    res.body.length.should.equal(3);
+                    done();
+                });
+        });
+    });
+    it('should return all items on GET by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                get('/items').
+                send({token}).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.should.be.an('Array');
+                    res.body.length.should.equal(3);
+                    done();
+                });
+        });
+    });
+    it('should return nothing on empty database', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                get('/items').
+                send({token}).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.should.be.an('Array');
+                    res.body.length.should.equal(3);
+                    done();
+                });
+        });
+    });
 
     it('should add an item on POST by admin', (done) => {
+        util.remove_all_items();
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).

@@ -8,7 +8,15 @@ const auth = require('../lib/auth.js');
 router.use(auth.decode_token);
 
 router.route('/').
-    get().
+    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+        lib.get_all_items((err, data) => {
+            if (err) {
+                res.status(err.status).send(err);
+            } else {
+                res.send(data);
+            }
+        });
+    }).
     post(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.add_item(req.body, (add_res) => {
             res.status(add_res.status).send(add_res);
