@@ -206,6 +206,34 @@ describe('/items/:id', () => {
     it('should change details on PUT by admin');
     it('should not change details on PUT by viewer');
 
-    it('should delete the item on DELETE by admin');
-    it('should not delete the item on DELETE by admin');
+    it('should delete the item on DELETE by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                delete('/items/3').
+                send({token}).
+                end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.equal('Item deleted');
+                    done();
+                });
+        });
+    });
+    it('should not delete the item on DELETE by viewer', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                delete('/items/3').
+                send({token}).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(401);
+                    res.body.message.should.equal('Not authorized');
+                    done();
+                });
+        });
+    });
 });

@@ -37,6 +37,10 @@ router.route('/:id').
     }).
     post().
     put().
-    delete();
+    delete(auth.authenticate({role: 'admin'}), (req, res) => {
+        lib.remove_item(req.params.id, (del_res) => {
+            res.send(del_res);
+        });
+    });
 
 module.exports = router;
