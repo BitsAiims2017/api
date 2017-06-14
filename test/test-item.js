@@ -89,7 +89,7 @@ describe('/items', () => {
                     should.exist(res);
                     res.should.have.status(201);
                     res.body.message.should.equal('Item added');
-                    Item.find({}, (e, d) => { d.length.should.equal(31) });
+                    Item.find({}, (e, d) => { d.length.should.equal(31); });
                     done();
                 });
         });

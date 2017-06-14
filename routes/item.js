@@ -21,6 +21,8 @@ router.route('/').
      * @api {get} /item?params 1.1 Request all items
      * @apiParam page The page number of items
      * @apiParam size The number of items on each page
+     * @apiParam sort The field to sort according to
+     * @apiParam order The order to sort with 'asc' or 'desc'
      *
      * @apiSuccess {Array} Items Array of all items
      *
