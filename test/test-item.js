@@ -132,11 +132,21 @@ describe('/items', () => {
         });
     });
 
-    it('should do nothing on PUT by admin');
-    it('should do nothing on PUT by viewer');
+    it('should do nothing on PUT', (done) => {
+        chai.
+            request(app).
+            put('/items').
+            end(util.check_bad_request);
+        done();
+    });
 
-    it('should do nothing on DELETE by admin');
-    it('should do nothing on DELETE by viewer');
+    it('should do nothing on DELETE', (done) => {
+        chai.
+            request(app).
+            delete('/items').
+            end(util.check_bad_request);
+        done();
+    });
 });
 
 describe('/items/:id', () => {
@@ -200,8 +210,13 @@ describe('/items/:id', () => {
         });
     });
 
-    it('should do nothing on POST by admin');
-    it('should do nothing on POST by viewer');
+    it('should do nothing on POST', (done) => {
+        chai.
+            request(app).
+            post('/items/10').
+            end(util.check_bad_request);
+        done();
+    });
 
     it('should change some details on PUT by admin', (done) => {
         util.get_login_token('admin', (token) => {
