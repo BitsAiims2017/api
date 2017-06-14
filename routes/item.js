@@ -18,7 +18,9 @@ router.route('/').
      * @apiGroup Item
      * @apiVersion 0.0.1
      *
-     * @api {get} /item 1.1 Request all items
+     * @api {get} /item?params 1.1 Request all items
+     * @apiParam page The page number of items
+     * @apiParam size The number of items on each page
      *
      * @apiSuccess {Array} Items Array of all items
      *
@@ -31,7 +33,7 @@ router.route('/').
      *  }
      */
     get(auth.authenticate({role: 'viewer'}), (req, res) => {
-        lib.get_all_items((err, data) => {
+        lib.get_all_items(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
             } else {

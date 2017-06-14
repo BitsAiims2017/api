@@ -25,8 +25,10 @@ describe('/items', () => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.should.be.an('Array');
-                    res.body.length.should.equal(3);
+                    res.body.should.be.an('Object');
+                    res.body.items.length.should.equal(10);
+                    should.exist(res.body.meta.next);
+                    should.not.exist(res.body.meta.prev);
                     done();
                 });
         });
@@ -41,24 +43,28 @@ describe('/items', () => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.should.be.an('Array');
-                    res.body.length.should.equal(3);
+                    res.body.should.be.an('Object');
+                    res.body.items.length.should.equal(10);
+                    should.exist(res.body.meta.next);
+                    should.not.exist(res.body.meta.prev);
                     done();
                 });
         });
     });
-    it('should return nothing on empty database', (done) => {
+    it('should correctly result paginated results', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/items').
+                get('/items?page=4&size=5').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.should.be.an('Array');
-                    res.body.length.should.equal(3);
+                    res.body.should.be.an('Object');
+                    res.body.items.length.should.equal(5);
+                    should.exist(res.body.meta.next);
+                    should.exist(res.body.meta.prev);
                     done();
                 });
         });
@@ -71,7 +77,7 @@ describe('/items', () => {
                 request(app).
                 post('/items').
                 send({
-                    id: 7,
+                    id: 90,
                     name: 'Item 7',
                     quantity: 40,
                     price: 30.5,
@@ -83,6 +89,7 @@ describe('/items', () => {
                     should.exist(res);
                     res.should.have.status(201);
                     res.body.message.should.equal('Item added');
+                    Item.find({}, (e, d) => { d.length.should.equal(31) });
                     done();
                 });
         });
@@ -93,7 +100,7 @@ describe('/items', () => {
                 request(app).
                 post('/items').
                 send({
-                    id: 7,
+                    id: 90,
                     name: 'Item 7',
                     quantity: 40,
                     price: 30.5,
@@ -168,9 +175,9 @@ describe('/items/:id', () => {
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
                     res.body.name.should.equal('Item 3');
-                    res.body.quantity.should.equal(30);
-                    res.body.price.should.equal(30.5);
-                    res.body.class.should.equal('A');
+                    res.body.quantity.should.equal(92);
+                    res.body.price.should.equal(1);
+                    res.body.class.should.equal('B');
                     done();
                 });
         });
@@ -187,9 +194,9 @@ describe('/items/:id', () => {
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
                     res.body.name.should.equal('Item 3');
-                    res.body.quantity.should.equal(30);
-                    res.body.price.should.equal(30.5);
-                    res.body.class.should.equal('A');
+                    res.body.quantity.should.equal(92);
+                    res.body.price.should.equal(1);
+                    res.body.class.should.equal('B');
                     done();
                 });
         });

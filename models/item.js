@@ -1,4 +1,5 @@
 const db = require('../config/db.js');
+const User = require('./user.js');
 
 const item_schema = new db.Schema({
     id: {
@@ -9,7 +10,8 @@ const item_schema = new db.Schema({
     name: String,
     quantity: Number,
     class: String,
-    price: Number
+    price: Number,
+    date_added: { type: Date, default: Date.now }
 });
 
 item_schema.methods.add_quantity = function add_quantity(qunatity, done) {
