@@ -43,6 +43,7 @@ describe('/users', () => {
                 });
         });
     });
+
     it('should return 401 on POST by non admin', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
@@ -128,12 +129,14 @@ describe('/users', () => {
                 });
         });
     });
+
     it('should return 400 on PUT', () => {
         chai.
             request(app).
             put('/users').
             end(util.check_bad_request);
     });
+
     it('should return 400 on DELETE', () => {
         chai.
             request(app).
@@ -145,7 +148,7 @@ describe('/users', () => {
 describe('/user/:id', () => {
 
     beforeEach(util.add_users);
-    after(util.remove_all_users);
+    afterEach(util.remove_all_users);
 
     it('should return 200 and user details on GET by admin', (done) => {
         util.get_login_token('admin', (token) => {
@@ -198,15 +201,69 @@ describe('/user/:id', () => {
                 });
         });
     });
+
     it('should return 400 on POST', () => {
         chai.
             request(app).
             post('/users/username').
             end(util.check_bad_request);
     });
-    it('should return 202 on PUT by user of ID = id');
-    it('should return 202 on PUT by admin');
-    it('should return 403 on PUT by any other user');
+
+    it('should return 200 on PUT by user of ID = id', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                put('/users/username01').
+                send({ name: 'A new name', token}).
+                end((err, res) => {
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.be.equal('User updated');
+                    User.findOne({username: 'username01', name: 'A new name'},
+                        (e, u) => {
+                            should.exist(u);
+                            done();
+                        });
+                });
+        });
+    });
+    it('should return 202 on PUT by admin', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                put('/users/username01').
+                send({ name: 'A new name', token}).
+                end((err, res) => {
+                    should.exist(res);
+                    res.should.have.status(200);
+                    res.body.message.should.be.equal('User updated');
+                    User.findOne({username: 'username01', name: 'A new name'},
+                        (e, u) => {
+                            should.exist(u);
+                            done();
+                        });
+                });
+        });
+    });
+    it('should return 401 on PUT by any other user', (done) => {
+        util.get_login_token('viewer', (token) => {
+            chai.
+                request(app).
+                put('/users/admin').
+                send({ name: 'A new name', token}).
+                end((err, res) => {
+                    should.exist(err);
+                    res.should.have.status(401);
+                    res.body.message.should.be.equal('Not authorized');
+                    User.findOne({username: 'username01', name: 'A new name'},
+                        (e, u) => {
+                            should.not.exist(u);
+                            done();
+                        });
+                });
+        });
+    });
+
     it('should return 202 on DELETE by admin', (done) => {
         util.get_login_token('admin', (token) => {
             chai.

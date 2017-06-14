@@ -161,7 +161,13 @@ router.route('/:username').
      */
     put(auth.authenticate({role: 'me'}), (req, res) => {
         //TODO: clean and validate user data
-        res.send('Not implemented');
+        lib.update_user(req.params.username, req.body, (err, upd_res) => {
+            if (err) {
+                res.status(err.status).send(err);
+            } else {
+                res.send(upd_res);
+            }
+        });
     }).
 
     /**
