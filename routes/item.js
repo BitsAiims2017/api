@@ -7,7 +7,29 @@ const auth = require('../lib/auth.js');
 // decode token and put data in req as 'req.data'
 router.use(auth.decode_token);
 
+/**
+ * @apiName AIIMS IMS
+ * @apiGroup Item
+ * @apiVersion 0.0.1
+ */
+
 router.route('/').
+    /**
+     * @apiGroup Item
+     * @apiVersion 0.0.1
+     *
+     * @api {get} /item 1.1 Request all items
+     *
+     * @apiSuccess {Array} Items Array of all items
+     *
+     * @apiError 401 The request is not authorized
+     *
+     * @apiErrorExample {json} Error:
+     *  {
+     *      "status": "Error status code",
+     *      "message": "Error Message"
+     *  }
+     */
     get(auth.authenticate({role: 'viewer'}), (req, res) => {
         lib.get_all_items((err, data) => {
             if (err) {
@@ -17,15 +39,52 @@ router.route('/').
             }
         });
     }).
+
+    /**
+     * @apiGroup Item
+     * @apiVersion 0.0.1
+     *
+     * @api {post} /item 1.2 Add a new item
+     * @apiDescription This can only by used by admin to add a new item
+     * @apiPermission admin
+     *
+     * @apiError 401 The request is not authorized
+     * @apiError 409 Item already exists
+     */
     post(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.add_item(req.body, (add_res) => {
             res.status(add_res.status).send(add_res);
         });
     }).
-    put().
-    delete();
+
+    /* not supported */
+    put((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    }).
+    delete((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    });
 
 router.route('/:id').
+    /**
+     * @apiGroup Item
+     * @apiVersion 0.0.1
+     *
+     * @api {get} /item/:id 2.1 Request item information
+     * @apiDescription This can be used to get item details
+     *
+     * @apiParam {String} id The id of the item
+     *
+     * @apiError 401 The request is not authorized
+     * @apiError 403 The request is not authorized
+     * @apiError 404 The item was not found
+     *
+     * @apiErrorExample {json} Error:
+     *  {
+     *      "status": "Error status code",
+     *      "message": "Error Message"
+     *  }
+     */
     get(auth.authenticate({role: 'viewer'}), (req, res) => {
         lib.get_item(req.params.id, (err, item) => {
             if (err) {
@@ -35,7 +94,29 @@ router.route('/:id').
             }
         });
     }).
-    post().
+
+    /* not supported */
+    post((req, res) => {
+        res.status(400).send(lib.invalid_request());
+    }).
+
+    /**
+     * @apiGroup Item
+     * @apiVersion 0.0.1
+     *
+     * @api {put} /item/:id 2.2 Change item information
+     *
+     * @apiParam {Number} item The id of the item to be changed
+     * @apiParam {Type} parameter The parameter to change
+     *
+     * @apiError 403 The request is not authorized
+     *
+     * @apiErrorExample {json} Error:
+     *  {
+     *      "status": "Error status code",
+     *      "message": "Error Message"
+     *  }
+     */
     put(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.update_item(req.params.id, req.body, (err, upd_res) => {
             if (err) {
@@ -45,6 +126,24 @@ router.route('/:id').
             }
         });
     }).
+
+    /**
+     * @apiGroup Item
+     * @apiVersion 0.0.1
+     *
+     * @api {delete} /item/:id 2.3 Delete item
+     * @apiPermission admin
+     *
+     * @apiParam {Number} id The id of item to be deleted
+     *
+     * @apiError 403 The request is not authorized
+     *
+     * @apiErrorExample {json} Error:
+     *  {
+     *      "status": "Error status code",
+     *      "message": "Error Message"
+     *  }
+     */
     delete(auth.authenticate({role: 'admin'}), (req, res) => {
         lib.remove_item(req.params.id, (del_res) => {
             res.send(del_res);
