@@ -3,6 +3,7 @@ const router = require('express').Router();
 // import util funtions
 const lib = require('../lib/item.js');
 const auth = require('../lib/auth.js');
+const validate = require('../lib/validate.js');
 
 // decode token and put data in req as 'req.data'
 router.use(auth.decode_token);
@@ -56,6 +57,11 @@ router.route('/').
      * @apiError 409 Item already exists
      */
     post(auth.authenticate({role: 'admin'}), (req, res) => {
+        if(! validate.contains(req.body, ['id', 'name'])) {
+            res.status(400)
+                .send({error: 400, message: 'Incomplete parameters'});
+        }
+
         lib.add_item(req.body, (add_res) => {
             res.status(add_res.status).send(add_res);
         });

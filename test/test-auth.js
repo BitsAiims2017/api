@@ -66,5 +66,21 @@ describe('/auth', () => {
                 done();
             });
     });
-    it('should return 400 if no/incomplete credentials provided');
+    it('should return 400 if no/incomplete credentials provided', (done) => {
+        chai.
+            request(app).
+            post('/auth').
+            send({
+                username: 'admin'
+            }).
+            end((err, res) => {
+                should.exist(err);
+                should.exist(res);
+                res.should.have.status(400);
+                res.body.should.be.an('Object');
+                res.body.message.should.equal('Incomplete parameters');
+                should.not.exist(res.body.token);
+                done();
+            });
+    });
 });
