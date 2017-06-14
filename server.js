@@ -29,6 +29,7 @@ app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/user.js'));
 app.use('/items', require('./routes/item.js'));
 app.use('/auth', require('./routes/auth.js'));
+app.use('/search', require('./routes/search.js'));
 
 // start the app
 app.listen(port, host, () => {
