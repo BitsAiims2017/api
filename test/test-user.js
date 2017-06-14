@@ -121,7 +121,7 @@ describe('/users', () => {
     });
 });
 
-describe('/user/:id', () => {
+describe('/users/:id', () => {
 
     beforeEach(util.add_users);
     after(util.remove_all_users);
