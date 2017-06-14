@@ -3,6 +3,7 @@ const router = require('express').Router();
 // import util funtions
 const lib = require('../lib/user.js');
 const auth = require('../lib/auth.js');
+const validate = require('../lib/validate.js');
 
 /**
  * @apiName AIIMS IMS
@@ -64,7 +65,12 @@ router.route('/').
     post(auth.authenticate({role: 'admin'}), (req, res) => {
         let data = {};
 
-        //TODO: clean and validate user data
+        if(! validate.contains(req.body,
+            ['name', 'username', 'password', 'role'])) {
+            res.status(400)
+                .send({error: 400, message: 'Incomplete parameters'});
+        }
+
         data.name = req.body.name;
         data.username = req.body.username;
         data.password = req.body.password;

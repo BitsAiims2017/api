@@ -116,6 +116,27 @@ describe('/items', () => {
                 });
         });
     });
+    it('should not add an item with empty id or name', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                post('/items').
+                send({
+                    name: 'Item 2',
+                    quantity: 40,
+                    price: 30.5,
+                    class: 'C',
+                    token
+                }).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(400);
+                    res.body.message.should.equal('Incomplete parameters');
+                    done();
+                });
+        });
+    });
     it('should not add an item with duplicate id', (done) => {
         util.get_login_token('admin', (token) => {
             chai.

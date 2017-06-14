@@ -64,6 +64,27 @@ describe('/users', () => {
                 });
         });
     });
+    it('should return 400 on POST if incomplete parameters', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                post('/users').
+                send({
+                    name: 'User2',
+                    username: 'username02',
+                    role: 'viewer',
+                    token
+                }).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(400);
+                    res.body.message.should.be.equal('Incomplete parameters');
+                    User.find({}, (e, p) => { p.length.should.equal(2); });
+                    done();
+                });
+        });
+    });
     it('should return 201 on POST by admin', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
@@ -121,7 +142,7 @@ describe('/users', () => {
     });
 });
 
-describe('/users/:id', () => {
+describe('/user/:id', () => {
 
     beforeEach(util.add_users);
     after(util.remove_all_users);
