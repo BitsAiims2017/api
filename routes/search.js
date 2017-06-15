@@ -14,16 +14,18 @@ const validate = require('../lib/validate.js');
 // decode token and put data in req as 'req.data'
 router.use(auth.decode_token);
 
-router.route('/').
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
-    });
-
 router.route('/users').
     get(auth.authenticate({role: 'viewer'}), (req, res) => {
+        lib.search_users(req.query, (data) => {
+            res.status(data.status).send(data);
+        });
     });
 
 router.route('/items').
     get(auth.authenticate({role: 'viewer'}), (req, res) => {
+        lib.search_items(req.query, (data) => {
+            res.status(data.status).send(data);
+        });
     });
 
 module.exports = router;
