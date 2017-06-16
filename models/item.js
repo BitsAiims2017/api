@@ -1,5 +1,4 @@
 const db = require('../config/db.js');
-const User = require('./user.js');
 
 const item_schema = new db.Schema({
     id: {
