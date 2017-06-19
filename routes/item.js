@@ -61,10 +61,11 @@ router.route('/').
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
-
-        lib.add_item(req.body, (add_res) => {
-            res.status(add_res.status).send(add_res);
-        });
+        else {
+            lib.add_item(req.body, (add_res) => {
+                res.status(add_res.status).send(add_res);
+            });
+        }
     }).
 
     /* not supported */

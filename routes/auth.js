@@ -47,16 +47,18 @@ router.route('/').
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
-        const username = req.body.username;
-        const password = req.body.password;
+        else {
+            const username = req.body.username;
+            const password = req.body.password;
 
-        lib.auth_user({username, password}, (err, data) => {
-            if (err) {
-                res.status(err.status).send(err);
-            } else {
-                res.send(data);
-            }
-        });
+            lib.auth_user({username, password}, (err, data) => {
+                if (err) {
+                    res.status(err.status).send(err);
+                } else {
+                    res.send(data);
+                }
+            });
+        }
     });
 
 module.exports = router;

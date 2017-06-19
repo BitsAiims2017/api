@@ -70,15 +70,16 @@ router.route('/').
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
+        else {
+            data.name = req.body.name;
+            data.username = req.body.username;
+            data.password = req.body.password;
+            data.role = req.body.role;
 
-        data.name = req.body.name;
-        data.username = req.body.username;
-        data.password = req.body.password;
-        data.role = req.body.role;
-
-        lib.new_user(data, (err) => {
-            res.status(err.status).send(err);
-        });
+            lib.new_user(data, (err) => {
+                res.status(err.status).send(err);
+            });
+        }
     }).
 
     /* not supported */
