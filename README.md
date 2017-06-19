@@ -9,7 +9,7 @@ The common API for all aiims apps
 
 
 ### How to
-You should have NodeJS and MongoDB installed and running
+You should have NodeJS(v6.6.0 or above) and MongoDB installed and running
 ```bash
 git clone https://github.com/BitsAiims2017/api
 cd api
