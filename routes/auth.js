@@ -12,6 +12,8 @@ const User = require('../models/user.js');
  * @apiVersion 0.0.1
  */
 
+router.use(auth.limiter);
+
 /**
  */
 router.route('/').
