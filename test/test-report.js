@@ -55,7 +55,7 @@ describe('/reports', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports?page=4&size=5').
+                get('/reports?page=1&size=5').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
@@ -64,25 +64,23 @@ describe('/reports', () => {
                     res.body.should.be.an('Object');
                     res.body.reports.length.should.equal(5);
                     should.exist(res.body.meta.next);
-                    should.exist(res.body.meta.prev);
                     done();
                 });
         });
     });
 
-    it('should add an report on POST by admin', (done) => {
+    it('should add a report on POST by admin', (done) => {
         util.remove_all_reports();
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
                 post('/reports').
                 send({
-                    id: 90,
+                    id: 'report 40',
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
-                    remarks: 'Admit',
-                    diagnosed_by[]: 'Dr.ABC',
+                    remark: 'Admit',
                     token
                 }).
                 end((err, res) => {
@@ -90,23 +88,22 @@ describe('/reports', () => {
                     should.exist(res);
                     res.should.have.status(201);
                     res.body.message.should.equal('Report added');
-                    Report.find({}, (e, d) => { d.length.should.equal(31); });
+                    Report.find({}, (e, d) => { d.length.should.equal(11); });
                     done();
                 });
         });
     });
-    it('should not add an report on POST by viewer', (done) => {
+    it('should not add a report on POST by viewer', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
                 post('/reports').
                 send({
-                    id: 90,
+                    id: 'report 40',
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
-                    remarks: 'Admit',
-                    diagnosed_by[]: 'Dr.ABC',
+                    remark: 'Admit',
                     token
                     
                 }).
@@ -128,8 +125,7 @@ describe('/reports', () => {
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
-                    remarks: 'Admit',
-                    diagnosed_by[]: 'Dr.ABC',
+                    remark: 'Admit',
                     token
                    
                 }).
@@ -148,12 +144,11 @@ describe('/reports', () => {
                 request(app).
                 post('/reports').
                 send({
-                    id: 2,
+                    id: 'report1',
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
-                    remarks: 'Admit',
-                    diagnosed_by[]: 'Dr.ABC',
+                    remark: 'Admit',
                     token
                  }).
                 end((err, res) => {
@@ -183,7 +178,7 @@ describe('/reports', () => {
     });
 });
 
-describe('/reports/:id', () => {
+describe('/reports/:id', (done) => {
 
     before(util.add_users);
     beforeEach(util.add_reports);
@@ -194,38 +189,38 @@ describe('/reports/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports/3').
+                get('/reports/report1').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.symptoms.should.equal('Nausea');
-                    res.body.diagnosis.should.equal('Blood Test');
-                    res.body.conclusion.should.equal('Anaemia');
-                    res.body.remarks.should.equal('Eat fruits');
-                    res.body.diagnosed_by.should.equal('Dr.LMN');
+                    res.body.symptoms.should.equal('symp1, symp2');
+                    res.body.diagnosis.should.equal('some diag');
+                    res.body.conclusion.should.equal('some conc');
+                    res.body.remark.should.equal('some remark');
+                    res.body.diagnosed_by[0].should.equal('some dr');
                     done();
                 });
         });
     });
     it('should return the specific report on GET by viewer', (done) => {
-        util.get_login_token('viewer', (token) => {
+        util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports/3').
+                get('/reports/report1').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.symptoms.should.equal('Nausea');
-                    res.body.diagnosis.should.equal('Blood Test');
-                    res.body.conclusion.should.equal('Anaemia');
-                    res.body.remarks.should.equal('Eat fruits');
-                    res.body.diagnosed_by.should.equal('Dr.LMN');
+                    res.body.symptoms.should.equal('symp1, symp2');
+                    res.body.diagnosis.should.equal('some diag');
+                    res.body.conclusion.should.equal('some conc');
+                    res.body.remark.should.equal('some remark');
+                    res.body.diagnosed_by[0].should.equal('some dr');
                     done();
                 });
         });
@@ -234,7 +229,7 @@ describe('/reports/:id', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                get('/reports/40').
+                get('/reports/report40').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);
@@ -258,7 +253,7 @@ describe('/reports/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/3').
+                put('/reports/report3').
                 send({
                     symptoms: 'Pain',
                     diagnosis: 'X-Ray',
@@ -269,7 +264,8 @@ describe('/reports/:id', () => {
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.message.should.equal('Report updated');
-                    Report.findOne({id:'3', symptoms: 'Pain', diagnosis: 'X-Ray'},
+                    Report.findOne(
+                        {id:'report3', symptoms: 'Pain', diagnosis: 'X-Ray'},
                         (err, report) => {
                             should.not.exist(err);
                             should.exist(report);
@@ -282,14 +278,13 @@ describe('/reports/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/3').
+                put('/reports/report4').
                 send({
                     id:'3.1',
                     symptoms: 'Pain',
                     diagnosis: 'X-Ray',
                     conclusion: 'Fracture',
-                    remarks: 'Plaster',
-                    diagnosed_by[]: 'Dr.EFG',
+                    remark: 'Plaster',
                     token
                 }).
                 end((err, res) => {
@@ -302,8 +297,7 @@ describe('/reports/:id', () => {
                         symptoms: 'Pain',
                         diagnosis: 'X-Ray',
                         conclusion: 'Fracture',
-                        remarks: 'Plaster',
-                        diagnosed_by[]: 'Dr.EFG'
+                        remark: 'Plaster'
                     }, (err, report) => {
                         should.not.exist(err);
                         should.exist(report);
@@ -316,7 +310,7 @@ describe('/reports/:id', () => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                put('/reports/3').
+                put('/reports/report3').
                 send({name: 'New name', token}).
                 end((err, res) => {
                     should.exist(err);
@@ -331,9 +325,9 @@ describe('/reports/:id', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/3').
+                put('/reports/report3').
                 send({
-                    diagnosed_by[]: 'Dr.EFG',
+                    symptoms: 'something',
                     'while(1)': 'this',
                     ']console.log(this)': 'this',
                     '0];console.log(this)': 'this',
@@ -345,7 +339,7 @@ describe('/reports/:id', () => {
                     res.should.have.status(200);
                     res.body.message.should.equal('Report updated');
                     Report.findOne({
-                        diagnosed_by[]: 'Dr.EFG'
+                        symptoms: 'something'
                     }, (err, report) => {
                         should.not.exist(err);
                         should.exist(report);

@@ -61,6 +61,7 @@ router.route('/').
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
+        req.body.diagnosed_by = req.data.username;
 
         lib.add_report(req.body, (add_res) => {
             res.status(add_res.status).send(add_res);
