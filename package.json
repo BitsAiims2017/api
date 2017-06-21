@@ -7,7 +7,9 @@
     "start": "NODE_ENV=dev node server.js",
     "test": "mocha",
     "nodemon": "NODE_ENV=dev nodemon server.js",
-    "gendoc": "apidoc -i routes/ -o docs/"
+    "gendoc": "apidoc -i routes/ -o docs/",
+    "filldb": "node ./scripts/fill_db.js",
+    "emptydb": "node ./scripts/empty_db.js"
   },
   "repository": {
     "type": "git",

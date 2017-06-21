@@ -22,13 +22,16 @@ npm install && npm start
 - Fork and open a pull request with the changes
 - Follow the code style used in the project already and ask on gitter if in
 doubt.
-- Please run ```npm test``` to check that all tests pass before opening a pull request.
+- Please run ```npm test``` to check that all tests pass before opening a
+pull request.
+- You can fill and empty the sample data with ```npm run filldb```
+and ```npm run emptydb``` respectively.
 
 
 ### Documentation
 ```bash
 npm install
-npm run-script gendoc
+npm run gendoc
 ```
 Open ```index.html``` in ```docs/``` for API reference
 
