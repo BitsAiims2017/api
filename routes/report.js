@@ -40,6 +40,10 @@ router.route('/').
             if (err) {
                 res.status(err.status).send(err);
             } else {
+                res.links({
+                    next: data.meta.next,
+                    prev: data.meta.prev
+                });
                 res.send(data);
             }
         });
