@@ -66,7 +66,9 @@ router.route('/').
         let data = {};
 
         if(! validate.contains(req.body,
-            ['name', 'username', 'password', 'role'])) {
+            ['name', 'username', 'password', 'role'])
+            || validate.contains_space(req.body.username)
+        ){
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
