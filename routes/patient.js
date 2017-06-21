@@ -61,7 +61,7 @@ router.route('/').
      * @apiError 409 Patient already exists
      */
     post(auth.authenticate({role: 'admin'}), (req, res) => {
-        if(! validate.contains(req.body, ['id', 'name', 'age' , 'gender', 'blood_group'])) {
+        if(! validate.contains(req.body, ['id', 'name', 'dob' , 'gender', 'blood_group'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }

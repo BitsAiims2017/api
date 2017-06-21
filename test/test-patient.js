@@ -78,7 +78,7 @@ describe('/patients', () => {
                 send({
                     id: 'Patient11',
                     name: 'ABC',
-                    age: '12',
+                    dob: new Date(1997, 10, 25),
                     gender: 'Male',
                     blood_group: 'B+',
                     reports: ['123'],
@@ -102,7 +102,7 @@ describe('/patients', () => {
                 send({
                     id: 'Patient11',
                     name: 'ABC',
-                    age: '12',
+                    dob: new Date(1997, 10, 25),
                     gender: 'Male',
                     blood_group: 'B+',
                     token
@@ -123,7 +123,7 @@ describe('/patients', () => {
                 post('/patients').
                 send({
                     name: 'ABC',
-                    age: '12',
+                    dob: new Date(1997, 10, 25),
                     gender: 'Male',
                     blood_group: 'B+',
                     token
@@ -145,7 +145,7 @@ describe('/patients', () => {
                 send({
                     id: 'patient1',
                     name: 'ABC',
-                    age: '12',
+                    dob: new Date(1997, 10, 25),
                     gender: 'Male',
                     blood_group: 'B+',
                     token
@@ -196,7 +196,8 @@ describe('/patients/:id', (done) => {
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
                     res.body.name.should.equal('name');
-                    res.body.age.should.equal(20);
+                    Date.parse(new Date(1996, 10, 25)).should.equal(Date.parse(res.body.dob));
+                    should.exist(res.body.age);
                     res.body.gender.should.equal('gender');
                     res.body.blood_group.should.equal('blood group');
                     res.body.open_consultation[0].should.equal('some ids');
@@ -216,7 +217,8 @@ describe('/patients/:id', (done) => {
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
                     res.body.name.should.equal('name');
-                    res.body.age.should.equal(20);
+                    Date.parse(new Date(1996, 10, 25)).should.equal(Date.parse(res.body.dob));
+                    should.exist(res.body.age);
                     res.body.gender.should.equal('gender');
                     res.body.blood_group.should.equal('blood group');
                     res.body.open_consultation[0].should.equal('some ids');
@@ -255,7 +257,7 @@ describe('/patients/:id', (done) => {
                 put('/patients/patient3').
                 send({
                     name: 'DEF',
-                    age: '15',
+                    dob: new Date(1998, 10, 25),
                     token
                 }).
                 end((err, res) => {
@@ -264,7 +266,7 @@ describe('/patients/:id', (done) => {
                     res.should.have.status(200);
                     res.body.message.should.equal('Patient updated');
                     Patient.findOne(
-                        {id:'patient3', name: 'DEF', age: '15'},
+                        {id:'patient3', name: 'DEF', dob: new Date(1998, 10, 25),},
                         (err, patient) => {
                             should.not.exist(err);
                             should.exist(patient);
@@ -281,7 +283,7 @@ describe('/patients/:id', (done) => {
                 send({
                     id:'3.1',
                     name: 'DEF',
-                    age: '15',
+                    dob: new Date(1998, 10, 25),
                     gender: 'Female',
                     blood_group: 'A+',
                     token
@@ -294,7 +296,7 @@ describe('/patients/:id', (done) => {
                     Patient.findOne({
                         id:'3.1',
                         name: 'DEF',
-                        age: '15',
+                        dob: new Date(1998, 10, 25),
                         gender: 'Female',
                         blood_group: 'A+'
                     }, (err, patient) => {
