@@ -4,47 +4,47 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
 const app = require('../server.js');
-const Report = require('../models/report.js');
+const Patient = require('../models/patient.js');
 const util = require('../lib/test_util.js');
 chai.use(chaiHttp);
 
-describe('/reports', () => {
+describe('/patients', () => {
 
     before(util.add_users);
-    before(util.add_reports);
+    before(util.add_patients);
     after(util.remove_all_users);
-    after(util.remove_all_reports);
+    after(util.remove_all_patients);
 
-    it('should return all reports on GET by viewer', (done) => {
+    it('should return all patients on GET by viewer', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                get('/reports').
+                get('/patients').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.reports.length.should.equal(10);
+                    res.body.patients.length.should.equal(10);
                     should.exist(res.body.meta.next);
                     should.not.exist(res.body.meta.prev);
                     done();
                 });
         });
     });
-    it('should return all reports on GET by admin', (done) => {
+    it('should return all patients on GET by admin', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports').
+                get('/patients').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.reports.length.should.equal(10);
+                    res.body.patients.length.should.equal(10);
                     should.exist(res.body.meta.next);
                     should.not.exist(res.body.meta.prev);
                     done();
@@ -55,71 +55,57 @@ describe('/reports', () => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports?page=1&size=5').
+                get('/patients?page=1&size=5').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.reports.length.should.equal(5);
+                    res.body.patients.length.should.equal(5);
                     should.exist(res.body.meta.next);
                     done();
                 });
         });
     });
 
-    it('should add a report on POST by admin', (done) => {
-        util.remove_all_reports();
+    it('should add a patient on POST by admin', (done) => {
+        util.remove_all_patients();
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                post('/reports').
+                post('/patients').
                 send({
-                    id: 'report40',
-                    symptoms: 'headache',
-                    diagnosis: 'CT Scan',
-                    conclusion: 'Tumor',
-                    remark: 'Admit',
-                    prescription: [
-                        {
-                            name: 'med1',
-                            days: 5,
-                            times: 3,
-                            remark: 'Before meals'
-                        },
-                        {
-                            name: 'med2',
-                            days: 2,
-                            times: 6,
-                            remark: 'After meals'
-                        }
-                    ],
+                    id: 'Patient11',
+                    name: 'ABC',
+                    age: '12',
+                    gender: 'Male',
+                    blood_group: 'B+',
+                    reports: ['123'],
                     token
                 }).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(201);
-                    res.body.message.should.equal('Report added');
-                    Report.find({}, (e, d) => { d.length.should.equal(11); });
+                    res.body.message.should.equal('Patient added');
+                    Patient.find({}, (e, d) => { d.length.should.equal(11); });
                     done();
                 });
         });
     });
-    it('should not add a report on POST by viewer', (done) => {
+    it('should not add a patient on POST by viewer', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                post('/reports').
+                post('/patients').
                 send({
-                    id: 'report40',
-                    symptoms: 'headache',
-                    diagnosis: 'CT Scan',
-                    conclusion: 'Tumor',
-                    remark: 'Admit',
+                    id: 'Patient11',
+                    name: 'ABC',
+                    age: '12',
+                    gender: 'Male',
+                    blood_group: 'B+',
                     token
-                    
                 }).
                 end((err, res) => {
                     should.exist(err);
@@ -130,18 +116,17 @@ describe('/reports', () => {
                 });
         });
     });
-    it('should not add a report with empty id or symptoms', (done) => {
+    it('should not add a patient with empty id or name', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                post('/reports').
+                post('/patients').
                 send({
-                    symptoms: 'headache',
-                    diagnosis: 'CT Scan',
-                    conclusion: 'Tumor',
-                    remark: 'Admit',
+                    name: 'ABC',
+                    age: '12',
+                    gender: 'Male',
+                    blood_group: 'B+',
                     token
-                   
                 }).
                 end((err, res) => {
                     should.exist(err);
@@ -152,24 +137,24 @@ describe('/reports', () => {
                 });
         });
     });
-    it('should not add an report with duplicate id', (done) => {
+    it('should not add a patient with duplicate id', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                post('/reports').
+                post('/patients').
                 send({
-                    id: 'report1',
-                    symptoms: 'headache',
-                    diagnosis: 'CT Scan',
-                    conclusion: 'Tumor',
-                    remark: 'Admit',
+                    id: 'patient1',
+                    name: 'ABC',
+                    age: '12',
+                    gender: 'Male',
+                    blood_group: 'B+',
                     token
                  }).
                 end((err, res) => {
                     should.exist(err);
                     should.exist(res);
                     res.should.have.status(409);
-                    res.body.message.should.equal('Report already exists');
+                    res.body.message.should.equal('Patient already exists');
                     done();
                 });
         });
@@ -178,7 +163,7 @@ describe('/reports', () => {
     it('should do nothing on PUT', (done) => {
         chai.
             request(app).
-            put('/reports').
+            put('/patients').
             end(util.check_bad_request);
         done();
     });
@@ -186,69 +171,64 @@ describe('/reports', () => {
     it('should do nothing on DELETE', (done) => {
         chai.
             request(app).
-            delete('/reports').
+            delete('/patients').
             end(util.check_bad_request);
         done();
     });
 });
 
-describe('/reports/:id', (done) => {
+describe('/patients/:id', (done) => {
 
     before(util.add_users);
-    beforeEach(util.add_reports);
+    beforeEach(util.add_patients);
     after(util.remove_all_users);
-    afterEach(util.remove_all_reports);
+    afterEach(util.remove_all_patients);
 
-    it('should return the specific report on GET by admin', (done) => {
+    it('should return the specific patient on GET by admin', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports/report1').
+                get('/patients/patient1').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.symptoms.should.equal('symp1, symp2');
-                    res.body.diagnosis.should.equal('some diag');
-                    res.body.conclusion.should.equal('some conc');
-                    res.body.remark.should.equal('some remark');
-                    res.body.diagnosed_by[0].should.equal('some dr');
-                    res.body.prescription.length.should.equal(2);
-                    res.body.prescription[0].name.should.equal('med1');
-                    res.body.prescription[0].days.should.equal(5);
-                    res.body.prescription[0].times.should.equal(3);
-                    res.body.prescription[0].remark.should.equal('Before meal');
+                    res.body.name.should.equal('name');
+                    res.body.age.should.equal(20);
+                    res.body.gender.should.equal('gender');
+                    res.body.blood_group.should.equal('blood group');
+                    res.body.open_consultation[0].should.equal('some ids');
                     done();
                 });
         });
     });
-    it('should return the specific report on GET by viewer', (done) => {
+    it('should return the specific patient on GET by viewer', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                get('/reports/report1').
+                get('/patients/patient1').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
                     res.body.should.be.an('Object');
-                    res.body.symptoms.should.equal('symp1, symp2');
-                    res.body.diagnosis.should.equal('some diag');
-                    res.body.conclusion.should.equal('some conc');
-                    res.body.remark.should.equal('some remark');
-                    res.body.diagnosed_by[0].should.equal('some dr');
+                    res.body.name.should.equal('name');
+                    res.body.age.should.equal(20);
+                    res.body.gender.should.equal('gender');
+                    res.body.blood_group.should.equal('blood group');
+                    res.body.open_consultation[0].should.equal('some ids');
                     done();
                 });
         });
     });
-    it('should return nothing on report not found', (done) => {
+    it('should return nothing on patient not found', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                get('/reports/report40').
+                get('/patients/patient40').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);
@@ -263,7 +243,7 @@ describe('/reports/:id', (done) => {
     it('should do nothing on POST', (done) => {
         chai.
             request(app).
-            post('/reports/10').
+            post('/patients/10').
             end(util.check_bad_request);
         done();
     });
@@ -272,22 +252,22 @@ describe('/reports/:id', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/report3').
+                put('/patients/patient3').
                 send({
-                    symptoms: 'Pain',
-                    diagnosis: 'X-Ray',
+                    name: 'DEF',
+                    age: '15',
                     token
                 }).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.message.should.equal('Report updated');
-                    Report.findOne(
-                        {id:'report3', symptoms: 'Pain', diagnosis: 'X-Ray'},
-                        (err, report) => {
+                    res.body.message.should.equal('Patient updated');
+                    Patient.findOne(
+                        {id:'patient3', name: 'DEF', age: '15'},
+                        (err, patient) => {
                             should.not.exist(err);
-                            should.exist(report);
+                            should.exist(patient);
                             done();
                         });
                 });
@@ -297,39 +277,29 @@ describe('/reports/:id', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/report4').
+                put('/patients/patient4').
                 send({
                     id:'3.1',
-                    symptoms: 'Pain',
-                    diagnosis: 'X-Ray',
-                    conclusion: 'Fracture',
-                    remark: 'Plaster',
-                    prescription: [
-                        {
-                            name: 'med1',
-                            days: 5,
-                            times: 3,
-                            remark: 'Before meal'
-                        }
-                    ],
+                    name: 'DEF',
+                    age: '15',
+                    gender: 'Female',
+                    blood_group: 'A+',
                     token
                 }).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.message.should.equal('Report updated');
-                    Report.findOne({
+                    res.body.message.should.equal('Patient updated');
+                    Patient.findOne({
                         id:'3.1',
-                        symptoms: 'Pain',
-                        diagnosis: 'X-Ray',
-                        conclusion: 'Fracture',
-                        remark: 'Plaster'
-                    }, (err, report) => {
+                        name: 'DEF',
+                        age: '15',
+                        gender: 'Female',
+                        blood_group: 'A+'
+                    }, (err, patient) => {
                         should.not.exist(err);
-                        should.exist(report);
-                        report.prescription[0].name.should.equal('med1');
-                        report.prescription[0].days.should.equal(5);
+                        should.exist(patient);
                         done();
                     });
                 });
@@ -339,7 +309,7 @@ describe('/reports/:id', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                put('/reports/report3').
+                put('/patients/patient3').
                 send({name: 'New name', token}).
                 end((err, res) => {
                     should.exist(err);
@@ -354,9 +324,9 @@ describe('/reports/:id', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                put('/reports/report3').
+                put('/patients/patient3').
                 send({
-                    symptoms: 'something',
+                    name: 'something',
                     'while(1)': 'this',
                     ']console.log(this)': 'this',
                     '0];console.log(this)': 'this',
@@ -366,38 +336,38 @@ describe('/reports/:id', (done) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.message.should.equal('Report updated');
-                    Report.findOne({
-                        symptoms: 'something'
-                    }, (err, report) => {
+                    res.body.message.should.equal('Patient updated');
+                    Patient.findOne({
+                        name: 'something'
+                    }, (err, patient) => {
                         should.not.exist(err);
-                        should.exist(report);
+                        should.exist(patient);
                         done();
                     });
                 });
         });
     });
 
-    it('should delete the report on DELETE by admin', (done) => {
+    it('should delete the patient on DELETE by admin', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
                 request(app).
-                delete('/reports/3').
+                delete('/patients/patient3').
                 send({token}).
                 end((err, res) => {
                     should.not.exist(err);
                     should.exist(res);
                     res.should.have.status(200);
-                    res.body.message.should.equal('Report deleted');
+                    res.body.message.should.equal('Patient deleted');
                     done();
                 });
         });
     });
-    it('should not delete the report on DELETE by viewer', (done) => {
+    it('should not delete the patient on DELETE by viewer', (done) => {
         util.get_login_token('viewer', (token) => {
             chai.
                 request(app).
-                delete('/reports/3').
+                delete('/patients/patient3').
                 send({token}).
                 end((err, res) => {
                     should.exist(err);

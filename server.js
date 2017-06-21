@@ -43,6 +43,7 @@ app.use('/users', require('./routes/user.js'));
 app.use('/items', require('./routes/item.js'));
 app.use('/reports', require('./routes/report.js'));
 app.use('/auth', require('./routes/auth.js'));
+app.use('/patients', require('./routes/patient.js'));
 app.use('/search', require('./routes/search.js'));
 
 // send 'bad request' if no route found

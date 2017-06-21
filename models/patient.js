@@ -9,6 +9,8 @@ const patient_schema = new db.Schema(
         },
         name: String,
         age: Number,
+        gender: String,
+        blood_group: String,
         reports: [String],
         open_consultation: [String]
     }
