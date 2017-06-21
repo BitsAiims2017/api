@@ -20,10 +20,12 @@ router.route('/users').
      * @apiVersion 0.0.1
      *
      * @api {get} /search/users?params 1.1 Search for users
+     *
      * @apiParam query The query to search for
      * @apiParam limit The number of items in result
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor
      *
      * @apiSuccessExample {json} Success:
      *  {
@@ -51,10 +53,12 @@ router.route('/items').
      * @apiVersion 0.0.1
      *
      * @api {get} /search/items?params 1.2 Search for items
+     *
      * @apiParam query The query to search for
      * @apiParam limit The number of items in result
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, inventory, doctor
      *
      * @apiSuccessExample {json} Success:
      *  {

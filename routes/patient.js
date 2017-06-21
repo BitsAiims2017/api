@@ -24,6 +24,7 @@ router.route('/').
      * @apiParam size The number of patients on each page
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor
      *
      * @apiSuccess {Array} Patients Array of all patients
      *
@@ -55,7 +56,7 @@ router.route('/').
      *
      * @api {post} /patient 1.2 Add a new patient
      * @apiDescription This can only by used by admin to add a new patient
-     * @apiPermission admin
+     * @apiPermission admin, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 409 Patient already exists
@@ -91,6 +92,7 @@ router.route('/:id').
      * @apiDescription This can be used to get patient details
      *
      * @apiParam {String} id The id of the patient
+     * @apiPermission admin, viewer, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 403 The request is not authorized
@@ -125,6 +127,7 @@ router.route('/:id').
      *
      * @apiParam {Number} patient The id of the patient to be changed
      * @apiParam {Type} parameter The parameter to change
+     * @apiPermission admin, doctor
      *
      * @apiError 403 The request is not authorized
      *

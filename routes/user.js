@@ -22,7 +22,7 @@ router.route('/').
      * @api {get} /user/ 1.1 Request all users' information
      * @apiDescription This can only by used by admin to get the imformation
      * about all users in one place.
-     * @apiPermission admin
+     * @apiPermission admin, doctor
      *
      * @apiSuccess {Array} Users Array of name and role for all users
      *
@@ -99,6 +99,7 @@ router.route('/:username').
      * @apiDescription This can be used to get user details
      *
      * @apiParam {Number} username The username of the user
+     * @apiPermission admin
      *
      * @apiSuccess {String} name Name of the user
      * @apiSuccess {String} role Role of the user
@@ -144,6 +145,7 @@ router.route('/:username').
      *
      * @apiParam {Number} username The username to be changed
      * @apiParam {String} name (optional) New name
+     * @apiPermission admin
      *
      * @apiSuccessExample {json} Success:
      *  {
@@ -176,9 +178,9 @@ router.route('/:username').
      * @apiVersion 0.0.1
      *
      * @api {delete} /user/:id 2.3 Delete user
-     * @apiPermission admin
      *
      * @apiParam {Number} username The username to be deleted
+     * @apiPermission admin
      *
      * @apiError 403 The request is not authorized
      *

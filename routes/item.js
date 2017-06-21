@@ -24,6 +24,7 @@ router.route('/').
      * @apiParam size The number of items on each page
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor, inventory
      *
      * @apiSuccess {Array} Items Array of all items
      *
@@ -56,7 +57,7 @@ router.route('/').
      *
      * @api {post} /item 1.2 Add a new item
      * @apiDescription This can only by used by admin to add a new item
-     * @apiPermission admin
+     * @apiPermission admin, inventory
      *
      * @apiError 401 The request is not authorized
      * @apiError 409 Item already exists
@@ -88,6 +89,7 @@ router.route('/:id').
      *
      * @api {get} /item/:id 2.1 Request item information
      * @apiDescription This can be used to get item details
+     * @apiPermission admin, viewer, doctor, inventory
      *
      * @apiParam {String} id The id of the item
      *
@@ -125,6 +127,7 @@ router.route('/:id').
      *
      * @apiParam {Number} item The id of the item to be changed
      * @apiParam {Type} parameter The parameter to change
+     * @apiPermission admin, inventory
      *
      * @apiError 403 The request is not authorized
      *
@@ -149,9 +152,9 @@ router.route('/:id').
      * @apiVersion 0.0.1
      *
      * @api {delete} /item/:id 2.3 Delete item
-     * @apiPermission admin
      *
      * @apiParam {Number} id The id of item to be deleted
+     * @apiPermission admin, inventory
      *
      * @apiError 403 The request is not authorized
      *

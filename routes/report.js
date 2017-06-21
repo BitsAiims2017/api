@@ -24,6 +24,7 @@ router.route('/').
      * @apiParam size The number of reports on each page
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor
      *
      * @apiSuccess {Array} Reports Array of all reports
      *
@@ -55,7 +56,7 @@ router.route('/').
      *
      * @api {post} /report 1.2 Add a new report
      * @apiDescription This can only by used by admin to add a new report
-     * @apiPermission admin
+     * @apiPermission admin, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 409 Report already exists
@@ -89,6 +90,7 @@ router.route('/:id').
      * @apiDescription This can be used to get report details
      *
      * @apiParam {String} id The id of the report
+     * @apiPermission admin, viewer, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 403 The request is not authorized
@@ -123,6 +125,7 @@ router.route('/:id').
      *
      * @apiParam {Number} report The id of the report to be changed
      * @apiParam {Type} parameter The parameter to change
+     * @apiPermission admin, doctor
      *
      * @apiError 403 The request is not authorized
      *
@@ -147,9 +150,9 @@ router.route('/:id').
      * @apiVersion 0.0.1
      *
      * @api {delete} /report/:id 2.3 Delete report
-     * @apiPermission admin
      *
      * @apiParam {Number} id The id of report to be deleted
+     * @apiPermission admin
      *
      * @apiError 403 The request is not authorized
      *
