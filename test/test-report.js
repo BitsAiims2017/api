@@ -76,11 +76,25 @@ describe('/reports', () => {
                 request(app).
                 post('/reports').
                 send({
-                    id: 'report 40',
+                    id: 'report40',
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
                     remark: 'Admit',
+                    prescription: [
+                        {
+                            name: 'med1',
+                            days: 5,
+                            times: 3,
+                            remark: 'Before meals'
+                        },
+                        {
+                            name: 'med2',
+                            days: 2,
+                            times: 6,
+                            remark: 'After meals'
+                        }
+                    ],
                     token
                 }).
                 end((err, res) => {
@@ -99,7 +113,7 @@ describe('/reports', () => {
                 request(app).
                 post('/reports').
                 send({
-                    id: 'report 40',
+                    id: 'report40',
                     symptoms: 'headache',
                     diagnosis: 'CT Scan',
                     conclusion: 'Tumor',
@@ -201,6 +215,11 @@ describe('/reports/:id', (done) => {
                     res.body.conclusion.should.equal('some conc');
                     res.body.remark.should.equal('some remark');
                     res.body.diagnosed_by[0].should.equal('some dr');
+                    res.body.prescription.length.should.equal(2);
+                    res.body.prescription[0].name.should.equal('med1');
+                    res.body.prescription[0].days.should.equal(5);
+                    res.body.prescription[0].times.should.equal(3);
+                    res.body.prescription[0].remark.should.equal('Before meal');
                     done();
                 });
         });
@@ -285,6 +304,14 @@ describe('/reports/:id', (done) => {
                     diagnosis: 'X-Ray',
                     conclusion: 'Fracture',
                     remark: 'Plaster',
+                    prescription: [
+                        {
+                            name: 'med1',
+                            days: 5,
+                            times: 3,
+                            remark: 'Before meal'
+                        }
+                    ],
                     token
                 }).
                 end((err, res) => {
@@ -301,6 +328,8 @@ describe('/reports/:id', (done) => {
                     }, (err, report) => {
                         should.not.exist(err);
                         should.exist(report);
+                        report.prescription[0].name.should.equal('med1');
+                        report.prescription[0].days.should.equal(5);
                         done();
                     });
                 });

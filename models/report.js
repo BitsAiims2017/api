@@ -11,7 +11,13 @@ const report_schema = new db.Schema(
         diagnosis: String,
         conclusion: String,
         remark: String,
-        diagnosed_by: [String]
+        diagnosed_by: [String],
+        prescription: [{
+            name: String,
+            days: Number,
+            times: Number,
+            remark: String
+        }]
     },
     {
         timestamps: {
