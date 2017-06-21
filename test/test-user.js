@@ -65,6 +65,26 @@ describe('/users', () => {
                 });
         });
     });
+    it('should return 400 on POST if space in username', (done) => {
+        util.get_login_token('admin', (token) => {
+            chai.
+                request(app).
+                post('/users').
+                send({
+                    name: 'User2',
+                    username: 'username 02',
+                    password: 'password2',
+                    role: 'viewer',
+                    token
+                }).
+                end((err, res) => {
+                    should.exist(err);
+                    should.exist(res);
+                    res.should.have.status(400);
+                    done();
+                });
+        });
+    });
     it('should return 400 on POST if incomplete parameters', (done) => {
         util.get_login_token('admin', (token) => {
             chai.
