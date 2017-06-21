@@ -35,7 +35,7 @@ router.route('/').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor']}), (req, res) => {
         lib.get_all_patients(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -61,7 +61,8 @@ router.route('/').
      * @apiError 409 Patient already exists
      */
     post(auth.authenticate({role: 'admin'}), (req, res) => {
-        if(! validate.contains(req.body, ['id', 'name', 'dob' , 'gender', 'blood_group'])) {
+        if(! validate.contains(req.body, ['id', 'name', 'dob', 'gender',
+            'blood_group'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
@@ -101,7 +102,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor']}), (req, res) => {
         lib.get_patient(req.params.id, (err, patient) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -133,7 +134,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    put(auth.authenticate({role: 'admin'}), (req, res) => {
+    put(auth.authenticate({roles: ['admin', 'doctor']}), (req, res) => {
         lib.update_patient(req.params.id, req.body, (err, upd_res) => {
             if (err) {
                 res.status(err.status).send(err);

@@ -39,7 +39,7 @@ router.route('/users').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'doctor' ]}), (req, res) => {
         lib.search_users(req.query, (data) => {
             res.status(data.status).send(data);
         });
@@ -70,7 +70,8 @@ router.route('/items').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'inventory', 'doctor' ]}),
+    (req, res) => {
         lib.search_items(req.query, (data) => {
             res.status(data.status).send(data);
         });

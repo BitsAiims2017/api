@@ -35,7 +35,7 @@ router.route('/').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'doctor' ]}), (req, res) => {
         lib.get_all_reports(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -60,7 +60,7 @@ router.route('/').
      * @apiError 401 The request is not authorized
      * @apiError 409 Report already exists
      */
-    post(auth.authenticate({role: 'admin'}), (req, res) => {
+    post(auth.authenticate({roles: [ 'admin', 'doctor' ]}), (req, res) => {
         if(! validate.contains(req.body, ['id', 'symptoms'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
@@ -100,7 +100,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'doctor' ]}), (req, res) => {
         lib.get_report(req.params.id, (err, report) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -132,7 +132,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    put(auth.authenticate({role: 'admin'}), (req, res) => {
+    put(auth.authenticate({roles: [ 'admin', 'doctor' ]}), (req, res) => {
         lib.update_report(req.params.id, req.body, (err, upd_res) => {
             if (err) {
                 res.status(err.status).send(err);

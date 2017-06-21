@@ -40,7 +40,7 @@ router.route('/').
      *      "error": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'admin'}), (req, res) => {
+    get(auth.authenticate({roles: ['admin', 'doctor']}), (req, res) => {
         lib.get_all_users((err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -62,7 +62,7 @@ router.route('/').
      * @apiError 409 User already exists
      * @apiError 500 Internal error
      */
-    post(auth.authenticate({role: 'admin'}), (req, res) => {
+    post(auth.authenticate({roles: ['admin']}), (req, res) => {
         let data = {};
 
         if(! validate.contains(req.body,

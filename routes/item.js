@@ -35,7 +35,8 @@ router.route('/').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor', 'inventory', 'admin']}),
+    (req, res) => {
         lib.get_all_items(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -60,7 +61,7 @@ router.route('/').
      * @apiError 401 The request is not authorized
      * @apiError 409 Item already exists
      */
-    post(auth.authenticate({role: 'admin'}), (req, res) => {
+    post(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         if(! validate.contains(req.body, ['id', 'name'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
@@ -100,7 +101,8 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor', 'inventory', 'admin']}),
+    (req, res) => {
         lib.get_item(req.params.id, (err, item) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -132,7 +134,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    put(auth.authenticate({role: 'admin'}), (req, res) => {
+    put(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         lib.update_item(req.params.id, req.body, (err, upd_res) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -159,7 +161,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    delete(auth.authenticate({role: 'admin'}), (req, res) => {
+    delete(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         lib.remove_item(req.params.id, (del_res) => {
             res.send(del_res);
         });
