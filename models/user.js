@@ -20,7 +20,7 @@ const user_schema = new db.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'viewer'],
+        enum: ['admin', 'viewer', 'doctor', 'patient', 'inventory'],
         required: true
     },
     meta: {

@@ -24,6 +24,7 @@ router.route('/').
      * @apiParam size The number of patients on each page
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor
      *
      * @apiSuccess {Array} Patients Array of all patients
      *
@@ -35,7 +36,7 @@ router.route('/').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor']}), (req, res) => {
         lib.get_all_patients(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -55,13 +56,14 @@ router.route('/').
      *
      * @api {post} /patient 1.2 Add a new patient
      * @apiDescription This can only by used by admin to add a new patient
-     * @apiPermission admin
+     * @apiPermission admin, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 409 Patient already exists
      */
     post(auth.authenticate({role: 'admin'}), (req, res) => {
-        if(! validate.contains(req.body, ['id', 'name', 'dob' , 'gender', 'blood_group'])) {
+        if(! validate.contains(req.body, ['id', 'name', 'dob', 'gender',
+            'blood_group'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
         }
@@ -90,6 +92,7 @@ router.route('/:id').
      * @apiDescription This can be used to get patient details
      *
      * @apiParam {String} id The id of the patient
+     * @apiPermission admin, viewer, doctor
      *
      * @apiError 401 The request is not authorized
      * @apiError 403 The request is not authorized
@@ -101,7 +104,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor']}), (req, res) => {
         lib.get_patient(req.params.id, (err, patient) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -124,6 +127,7 @@ router.route('/:id').
      *
      * @apiParam {Number} patient The id of the patient to be changed
      * @apiParam {Type} parameter The parameter to change
+     * @apiPermission admin, doctor
      *
      * @apiError 403 The request is not authorized
      *
@@ -133,7 +137,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    put(auth.authenticate({role: 'admin'}), (req, res) => {
+    put(auth.authenticate({roles: ['admin', 'doctor']}), (req, res) => {
         lib.update_patient(req.params.id, req.body, (err, upd_res) => {
             if (err) {
                 res.status(err.status).send(err);

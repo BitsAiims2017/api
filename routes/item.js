@@ -24,6 +24,7 @@ router.route('/').
      * @apiParam size The number of items on each page
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor, inventory
      *
      * @apiSuccess {Array} Items Array of all items
      *
@@ -35,7 +36,8 @@ router.route('/').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor', 'inventory', 'admin']}),
+    (req, res) => {
         lib.get_all_items(req.query, (err, data) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -55,12 +57,12 @@ router.route('/').
      *
      * @api {post} /item 1.2 Add a new item
      * @apiDescription This can only by used by admin to add a new item
-     * @apiPermission admin
+     * @apiPermission admin, inventory
      *
      * @apiError 401 The request is not authorized
      * @apiError 409 Item already exists
      */
-    post(auth.authenticate({role: 'admin'}), (req, res) => {
+    post(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         if(! validate.contains(req.body, ['id', 'name'])) {
             res.status(400)
                 .send({error: 400, message: 'Incomplete parameters'});
@@ -87,6 +89,7 @@ router.route('/:id').
      *
      * @api {get} /item/:id 2.1 Request item information
      * @apiDescription This can be used to get item details
+     * @apiPermission admin, viewer, doctor, inventory
      *
      * @apiParam {String} id The id of the item
      *
@@ -100,7 +103,8 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: ['viewer', 'doctor', 'inventory', 'admin']}),
+    (req, res) => {
         lib.get_item(req.params.id, (err, item) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -123,6 +127,7 @@ router.route('/:id').
      *
      * @apiParam {Number} item The id of the item to be changed
      * @apiParam {Type} parameter The parameter to change
+     * @apiPermission admin, inventory
      *
      * @apiError 403 The request is not authorized
      *
@@ -132,7 +137,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    put(auth.authenticate({role: 'admin'}), (req, res) => {
+    put(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         lib.update_item(req.params.id, req.body, (err, upd_res) => {
             if (err) {
                 res.status(err.status).send(err);
@@ -147,9 +152,9 @@ router.route('/:id').
      * @apiVersion 0.0.1
      *
      * @api {delete} /item/:id 2.3 Delete item
-     * @apiPermission admin
      *
      * @apiParam {Number} id The id of item to be deleted
+     * @apiPermission admin, inventory
      *
      * @apiError 403 The request is not authorized
      *
@@ -159,7 +164,7 @@ router.route('/:id').
      *      "message": "Error Message"
      *  }
      */
-    delete(auth.authenticate({role: 'admin'}), (req, res) => {
+    delete(auth.authenticate({roles: ['admin', 'inventory']}), (req, res) => {
         lib.remove_item(req.params.id, (del_res) => {
             res.send(del_res);
         });

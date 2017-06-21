@@ -20,10 +20,12 @@ router.route('/users').
      * @apiVersion 0.0.1
      *
      * @api {get} /search/users?params 1.1 Search for users
+     *
      * @apiParam query The query to search for
      * @apiParam limit The number of items in result
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, doctor
      *
      * @apiSuccessExample {json} Success:
      *  {
@@ -39,7 +41,7 @@ router.route('/users').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'doctor' ]}), (req, res) => {
         lib.search_users(req.query, (data) => {
             res.status(data.status).send(data);
         });
@@ -51,10 +53,12 @@ router.route('/items').
      * @apiVersion 0.0.1
      *
      * @api {get} /search/items?params 1.2 Search for items
+     *
      * @apiParam query The query to search for
      * @apiParam limit The number of items in result
      * @apiParam sort The field to sort according to
      * @apiParam order The order to sort with 'asc' or 'desc'
+     * @apiPermission admin, viewer, inventory, doctor
      *
      * @apiSuccessExample {json} Success:
      *  {
@@ -70,7 +74,8 @@ router.route('/items').
      *      "message": "Error Message"
      *  }
      */
-    get(auth.authenticate({role: 'viewer'}), (req, res) => {
+    get(auth.authenticate({roles: [ 'viewer', 'inventory', 'doctor' ]}),
+    (req, res) => {
         lib.search_items(req.query, (data) => {
             res.status(data.status).send(data);
         });

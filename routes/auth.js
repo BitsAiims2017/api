@@ -31,12 +31,15 @@ router.route('/').
      *
      * @apiSuccessExample {json} Success:
      * {
-     *      "token": "an access token"
+     *      "token": "an access token",
+     *      "username": "the username",
+     *      "role": "the role just authenticated"
      * }
      *
      * @apiError 400 Empty/invalid request
      * @apiError 401 Wrong credentials
      * @apiError 404 User does not exist
+     * @apiError 429 Too many requests
      *
      * @apiErrorExample {json} Error:
      *  {
