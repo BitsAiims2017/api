@@ -19,7 +19,7 @@ router.route('/').
      * @apiGroup User
      * @apiVersion 0.0.1
      *
-     * @api {get} /user/ 1.1 Request all users' information
+     * @api {get} /users/ 1.1 Request all users' information
      * @apiDescription This can only by used by admin to get the imformation
      * about all users in one place.
      * @apiPermission admin, doctor
@@ -54,10 +54,11 @@ router.route('/').
      * @apiGroup User
      * @apiVersion 0.0.1
      *
-     * @api {post} /user/ 1.2 Add a new user
+     * @api {post} /users/ 1.2 Add a new user
      * @apiDescription This can only by used by admin to add a new user
      * @apiPermission admin
      *
+     * @apiError 400 Incomplete/wrong parameters
      * @apiError 401 The request is not authorized
      * @apiError 409 User already exists
      * @apiError 500 Internal error
@@ -97,7 +98,7 @@ router.route('/:username').
      * @apiGroup User
      * @apiVersion 0.0.1
      *
-     * @api {get} /user/:id 2.1 Request user information
+     * @api {get} /users/:id 2.1 Request user information
      * @apiDescription This can be used to get user details
      *
      * @apiParam {Number} username The username of the user
@@ -143,7 +144,7 @@ router.route('/:username').
      * @apiGroup User
      * @apiVersion 0.0.1
      *
-     * @api {put} /user/:id 2.2 Change user information
+     * @api {put} /users/:id 2.2 Change user information
      *
      * @apiParam {Number} username The username to be changed
      * @apiParam {String} name (optional) New name
@@ -179,7 +180,7 @@ router.route('/:username').
      * @apiGroup User
      * @apiVersion 0.0.1
      *
-     * @api {delete} /user/:id 2.3 Delete user
+     * @api {delete} /users/:id 2.3 Delete user
      *
      * @apiParam {Number} username The username to be deleted
      * @apiPermission admin
