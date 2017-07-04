@@ -24,7 +24,7 @@ const user_schema = new db.Schema({
         required: true
     },
     meta: {
-        joined: Date
+        joined: { type: Date, default: Date.now(), required: true }
     }
 });
 
