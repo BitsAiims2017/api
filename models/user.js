@@ -26,6 +26,24 @@ const user_schema = new db.Schema({
     meta: {
         joined: { type: Date, default: Date.now(), required: true }
     }
+}, {id: false});
+
+user_schema.virtual('joined').
+    get(function() {
+        date = new Date(this.meta.joined);
+        return {
+            raw: date,
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate(),
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
+        };
+    });
+
+user_schema.set('toJSON', {
+    getters: true
 });
 
 /**
