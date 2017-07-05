@@ -30,7 +30,7 @@ const user_schema = new db.Schema({
 
 user_schema.virtual('joined').
     get(function() {
-        date = new Date(this.meta.joined);
+        let date = new Date(this.meta.joined);
         return {
             raw: date,
             year: date.getFullYear(),
