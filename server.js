@@ -14,7 +14,7 @@ const host = process.env.HOST || config.host;
 
 // add a logger if env is not test
 if (process.env.NODE_ENV !== 'test') {
-    app.use(logger('dev'));
+    app.use(logger(':method :status - :response-time ms - :url'));
 }
 
 // set json properties
