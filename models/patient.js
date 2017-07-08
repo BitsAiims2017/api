@@ -21,6 +21,20 @@ patient_schema.virtual('age').
         return parseInt((Date.now() - Date.parse(this.dob))/31536000000);
     });
 
+patient_schema.virtual('dob_obj').
+    get(function() {
+        let date = new Date(this.dob);
+        return {
+            raw: date,
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate(),
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
+        };
+    });
+
 patient_schema.set('toJSON', {
     virtuals: true
 });
