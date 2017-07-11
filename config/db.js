@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'test') {
 
 // connect the database
 db.connect(process.env.MONGODB_DB_URL || 'mongodb://' + config.db.host
-    + ':' + config.db.port + '/' + config.db.name);
+    + ':' + config.db.port + '/' + config.db.name, { useMongoClient: true });
 
 // test the connection
 db.connection.
