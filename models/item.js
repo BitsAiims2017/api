@@ -9,7 +9,7 @@ const item_schema = new db.Schema({
     },
     name: String,
     quantity: Number,
-    class: String,
+    categories: String,
     price: Number,
     date_added: { type: Date, default: Date.now }
 });

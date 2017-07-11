@@ -81,7 +81,7 @@ describe('/items', () => {
                     name: 'Item 7',
                     quantity: 40,
                     price: 30.5,
-                    class: 'C',
+                    categories: 'C',
                     token
                 }).
                 end((err, res) => {
@@ -104,7 +104,7 @@ describe('/items', () => {
                     name: 'Item 7',
                     quantity: 40,
                     price: 30.5,
-                    class: 'C',
+                    categories: 'C',
                     token
                 }).
                 end((err, res) => {
@@ -125,7 +125,7 @@ describe('/items', () => {
                     name: 'Item 2',
                     quantity: 40,
                     price: 30.5,
-                    class: 'C',
+                    categories: 'C',
                     token
                 }).
                 end((err, res) => {
@@ -147,7 +147,7 @@ describe('/items', () => {
                     name: 'Item 2',
                     quantity: 40,
                     price: 30.5,
-                    class: 'C',
+                    categories: 'C',
                     token
                 }).
                 end((err, res) => {
@@ -198,7 +198,7 @@ describe('/items/:id', () => {
                     res.body.name.should.equal('Item 3');
                     res.body.quantity.should.equal(92);
                     res.body.price.should.equal(1);
-                    res.body.class.should.equal('B');
+                    res.body.categories.should.equal('B');
                     done();
                 });
         });
@@ -217,7 +217,7 @@ describe('/items/:id', () => {
                     res.body.name.should.equal('Item 3');
                     res.body.quantity.should.equal(92);
                     res.body.price.should.equal(1);
-                    res.body.class.should.equal('B');
+                    res.body.categories.should.equal('B');
                     done();
                 });
         });
@@ -280,7 +280,7 @@ describe('/items/:id', () => {
                     name: 'Item 3.1',
                     price: 56,
                     quantity: 70,
-                    class: 'D',
+                    categories: 'D',
                     token
                 }).
                 end((err, res) => {
@@ -293,7 +293,7 @@ describe('/items/:id', () => {
                         name: 'Item 3.1',
                         price: 56,
                         quantity: 70,
-                        class: 'D'
+                        categories: 'D'
                     }, (err, item) => {
                         should.not.exist(err);
                         should.exist(item);
@@ -323,7 +323,7 @@ describe('/items/:id', () => {
                 request(app).
                 put('/items/3').
                 send({
-                    class: 'D',
+                    categories: 'D',
                     'while(1)': 'this',
                     ']console.log(this)': 'this',
                     '0];console.log(this)': 'this',
@@ -335,7 +335,7 @@ describe('/items/:id', () => {
                     res.should.have.status(200);
                     res.body.message.should.equal('Item updated');
                     Item.findOne({
-                        class: 'D'
+                        categories: 'D'
                     }, (err, item) => {
                         should.not.exist(err);
                         should.exist(item);
