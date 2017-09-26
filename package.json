@@ -9,7 +9,9 @@
     "nodemon": "NODE_ENV=dev nodemon server.js",
     "gendoc": "apidoc -i routes/ -o docs/",
     "filldb": "node ./scripts/fill_db.js",
-    "emptydb": "node ./scripts/empty_db.js"
+    "emptydb": "node ./scripts/empty_db.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -34,7 +36,8 @@
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.10.5",
     "morgan": "^1.8.2",
-    "serve-favicon": "^2.4.3"
+    "serve-favicon": "^2.4.3",
+    "snyk": "^1.41.1"
   },
   "devDependencies": {
     "apidoc": "^0.17.6",
@@ -45,5 +48,6 @@
   "apidoc": {
     "name": "AIIMS IMS API",
     "title": "AIIMS Inventory Management System"
-  }
+  },
+  "snyk": true
 }
